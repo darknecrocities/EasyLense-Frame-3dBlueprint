@@ -1,0 +1,500 @@
+// ESP32-CAM tolerance coupon
+// Small printable test tray for MB-ready compartment fit, cover rails, posts, vents, and wire strain relief.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+import rightControllerCoverPartExport as rightControllerCoverPart from "right_covers.kcl"
+
+couponCenterY = 0mm
+couponFloorTopZ = -espClearHeight / 2
+couponFloorZ = couponFloorTopZ - (wallThickness / 2)
+couponTopLipZ = espClearHeight / 2 + wallThickness / 2
+couponSideX = espClearWidth / 2 + wallThickness / 2
+couponEndY = espClearLength / 2 + wallThickness / 2
+couponPostX = espMountSpacingX / 2
+couponPostY = espMountSpacingY / 2
+couponPostHeight = espClearHeight - 6mm
+couponPostCenterZ = couponFloorTopZ + couponPostHeight / 2
+couponPilotSocketHeight = couponPostHeight + csgOverlap
+couponPilotSocketZ = couponPostCenterZ
+couponSideVentZUpper = espClearHeight / 2 - 4.2mm
+couponSideVentZLower = espClearHeight / 2 - 9.2mm
+couponCameraReliefY = -espClearLength / 2 + 7mm
+couponCameraReliefSecondY = couponCameraReliefY + 12mm
+couponUsbReliefY = -espClearLength / 2 + 17mm
+couponUsbReliefSecondY = couponUsbReliefY + 10mm
+couponCameraHookPostZ = espClearHeight / 2 - 0.2mm
+couponCameraHookLipZ = espClearHeight / 2 + 1mm
+couponUsbHookPostZ = couponFloorTopZ + 1.5mm
+couponUsbHookLipZ = couponFloorTopZ + 3.2mm
+couponCoverPrintZShift = -(espClearHeight + wallThickness)
+espBoardCenterZ = couponFloorTopZ + espStandoffHeight + espBoardThickness / 2
+
+couponFloorRaw = clone(unitBox)
+  |> scale(
+       x = espOuterWidth / 1mm,
+       y = espOuterLength / 1mm,
+       z = wallThickness / 1mm,
+       global = true,
+     )
+  |> translate(y = couponCenterY, z = couponFloorZ, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+couponUsbWirePassageCut = clone(unitBox)
+  |> scale(
+       x = 8mm / 1mm,
+       y = 8mm / 1mm,
+       z = (wallThickness + 2 * csgOverlap) / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = usbPowerChannelX,
+       y = couponUsbReliefY,
+       z = couponFloorZ,
+       global = true,
+     )
+couponFloor = subtract([couponFloorRaw], tools = [couponUsbWirePassageCut])
+
+couponOuterWallRaw = clone(unitBox)
+  |> scale(
+       x = wallThickness / 1mm,
+       y = espOuterLength / 1mm,
+       z = espOuterHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = couponSideX,
+       y = couponCenterY,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+couponSideVentCut1 = clone(unitBox)
+  |> scale(
+       x = (wallThickness + 2 * csgOverlap) / 1mm,
+       y = espVentSlotLength / 1mm,
+       z = espSideVentHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = couponSideX,
+       y = couponCenterY - 18mm,
+       z = couponSideVentZUpper,
+       global = true,
+     )
+couponSideVentCut2 = clone(couponSideVentCut1)
+  |> translate(y = 18mm, global = true)
+couponSideVentCut3 = clone(couponSideVentCut1)
+  |> translate(y = 36mm, global = true)
+couponSideVentCut4 = clone(couponSideVentCut1)
+  |> translate(z = couponSideVentZLower - couponSideVentZUpper, global = true)
+couponSideVentCut5 = clone(couponSideVentCut2)
+  |> translate(z = couponSideVentZLower - couponSideVentZUpper, global = true)
+couponSideVentCut6 = clone(couponSideVentCut3)
+  |> translate(z = couponSideVentZLower - couponSideVentZUpper, global = true)
+couponOuterWall = subtract(
+  [couponOuterWallRaw],
+  tools = [
+    couponSideVentCut1,
+    couponSideVentCut2,
+    couponSideVentCut3,
+    couponSideVentCut4,
+    couponSideVentCut5,
+    couponSideVentCut6
+  ],
+)
+couponInnerWall = clone(unitBox)
+  |> scale(
+       x = wallThickness / 1mm,
+       y = espOuterLength / 1mm,
+       z = espOuterHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -couponSideX,
+       y = couponCenterY,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+
+couponFrontWallRaw = clone(unitBox)
+  |> scale(
+       x = espOuterWidth / 1mm,
+       y = wallThickness / 1mm,
+       z = espOuterHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = couponCenterY - couponEndY, z = 0mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+couponCameraEntryCut = clone(unitBox)
+  |> scale(
+       x = 8mm / 1mm,
+       y = (wallThickness + 2 * csgOverlap) / 1mm,
+       z = 4mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraFlexChannelX,
+       y = couponCenterY - couponEndY,
+       z = espClearHeight / 2 - 2.4mm,
+       global = true,
+     )
+couponPowerEntryCut = clone(unitBox)
+  |> scale(
+       x = 7mm / 1mm,
+       y = (wallThickness + 2 * csgOverlap) / 1mm,
+       z = 4mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = usbPowerChannelX,
+       y = couponCenterY - couponEndY,
+       z = couponFloorTopZ + 2.2mm,
+       global = true,
+     )
+couponFrontWall = subtract(
+  [couponFrontWallRaw],
+  tools = [
+    couponCameraEntryCut,
+    couponPowerEntryCut
+  ],
+)
+couponRearWall = clone(unitBox)
+  |> scale(
+       x = espOuterWidth / 1mm,
+       y = wallThickness / 1mm,
+       z = espOuterHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = couponCenterY + couponEndY, z = 0mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+
+couponCoverLeftLip = clone(unitBox)
+  |> scale(
+       x = 5mm / 1mm,
+       y = espOuterLength / 1mm,
+       z = 2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -couponSideX + 1mm,
+       y = couponCenterY,
+       z = couponTopLipZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 74, metalness = 0)
+couponCoverRightLip = clone(couponCoverLeftLip)
+  |> translate(x = 2 * couponSideX - 2mm, global = true)
+
+couponPost1Raw = clone(unitCylinder)
+  |> scale(
+       x = espMountPostOuterDiameter / 1mm,
+       y = espMountPostOuterDiameter / 1mm,
+       z = couponPostHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -couponPostX,
+       y = couponCenterY - couponPostY,
+       z = couponPostCenterZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 70, metalness = 0)
+couponPilotCut1 = clone(unitCylinder)
+  |> scale(
+       x = espMountPilotDiameter / 1mm,
+       y = espMountPilotDiameter / 1mm,
+       z = couponPilotSocketHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -couponPostX,
+       y = couponCenterY - couponPostY,
+       z = couponPilotSocketZ,
+       global = true,
+     )
+couponPost2Raw = clone(couponPost1Raw)
+  |> translate(x = 2 * couponPostX, global = true)
+couponPilotCut2 = clone(couponPilotCut1)
+  |> translate(x = 2 * couponPostX, global = true)
+couponPost3Raw = clone(couponPost1Raw)
+  |> translate(y = 2 * couponPostY, global = true)
+couponPilotCut3 = clone(couponPilotCut1)
+  |> translate(y = 2 * couponPostY, global = true)
+couponPost4Raw = clone(couponPost2Raw)
+  |> translate(y = 2 * couponPostY, global = true)
+couponPilotCut4 = clone(couponPilotCut2)
+  |> translate(y = 2 * couponPostY, global = true)
+couponPost1 = subtract([couponPost1Raw], tools = [couponPilotCut1])
+couponPost2 = subtract([couponPost2Raw], tools = [couponPilotCut2])
+couponPost3 = subtract([couponPost3Raw], tools = [couponPilotCut3])
+couponPost4 = subtract([couponPost4Raw], tools = [couponPilotCut4])
+
+couponCameraCableChannel = clone(unitBox)
+  |> scale(
+       x = 5mm / 1mm,
+       y = 28mm / 1mm,
+       z = 3mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraFlexChannelX,
+       y = couponCameraReliefY + 7mm,
+       z = espClearHeight / 2 - 2.4mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 82, metalness = 0)
+couponPowerChannel = clone(unitBox)
+  |> scale(
+       x = 3.2mm / 1mm,
+       y = 28mm / 1mm,
+       z = 2.4mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = usbPowerChannelX,
+       y = couponUsbReliefY + 5mm,
+       z = couponFloorTopZ + 1.5mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 82, metalness = 0)
+
+couponCameraHookPostA = clone(unitBox)
+  |> scale(
+       x = strainReliefHookPostWidth / 1mm,
+       y = strainReliefHookLength / 1mm,
+       z = strainReliefHookPostHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraFlexChannelX - 3.8mm,
+       y = couponCameraReliefY,
+       z = couponCameraHookPostZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+couponCameraHookPostB = clone(couponCameraHookPostA)
+  |> translate(x = 7.6mm, global = true)
+couponCameraHookLip = clone(unitBox)
+  |> scale(
+       x = strainReliefHookLipWidth / 1mm,
+       y = strainReliefHookLength / 1mm,
+       z = strainReliefHookHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraFlexChannelX,
+       y = couponCameraReliefY,
+       z = couponCameraHookLipZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+couponCameraSecondHookPostA = clone(couponCameraHookPostA)
+  |> translate(y = couponCameraReliefSecondY - couponCameraReliefY, global = true)
+couponCameraSecondHookPostB = clone(couponCameraHookPostB)
+  |> translate(y = couponCameraReliefSecondY - couponCameraReliefY, global = true)
+couponCameraSecondHookLip = clone(couponCameraHookLip)
+  |> translate(y = couponCameraReliefSecondY - couponCameraReliefY, global = true)
+
+couponUsbHookPost1A = clone(unitBox)
+  |> scale(
+       x = strainReliefHookPostWidth / 1mm,
+       y = strainReliefHookLength / 1mm,
+       z = 3mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = usbPowerChannelX - 4.4mm,
+       y = couponUsbReliefY,
+       z = couponUsbHookPostZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+couponUsbHookPost1B = clone(couponUsbHookPost1A)
+  |> translate(x = 8.8mm, global = true)
+couponUsbHookLip1 = clone(unitBox)
+  |> scale(
+       x = 8.8mm / 1mm,
+       y = strainReliefHookLength / 1mm,
+       z = 1.1mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = usbPowerChannelX,
+       y = couponUsbReliefY,
+       z = couponUsbHookLipZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+couponUsbHookPost2A = clone(couponUsbHookPost1A)
+  |> translate(y = couponUsbReliefSecondY - couponUsbReliefY, global = true)
+couponUsbHookPost2B = clone(couponUsbHookPost1B)
+  |> translate(y = couponUsbReliefSecondY - couponUsbReliefY, global = true)
+couponUsbHookLip2 = clone(couponUsbHookLip1)
+  |> translate(y = couponUsbReliefSecondY - couponUsbReliefY, global = true)
+
+couponTrayBodies = flatten([
+  couponFloor,
+  couponOuterWall,
+  couponInnerWall,
+  couponFrontWall,
+  couponRearWall,
+  couponCoverLeftLip,
+  couponCoverRightLip,
+  couponPost1,
+  couponPost2,
+  couponPost3,
+  couponPost4,
+  couponCameraCableChannel,
+  couponPowerChannel,
+  couponCameraHookPostA,
+  couponCameraHookPostB,
+  couponCameraHookLip,
+  couponCameraSecondHookPostA,
+  couponCameraSecondHookPostB,
+  couponCameraSecondHookLip,
+  couponUsbHookPost1A,
+  couponUsbHookPost1B,
+  couponUsbHookLip1,
+  couponUsbHookPost2A,
+  couponUsbHookPost2B,
+  couponUsbHookLip2
+])
+
+couponCoverExploded = clone(rightControllerCoverPart)
+  |> translate(y = -espCenterY, z = 35mm, global = true)
+couponCoverPrint = clone(rightControllerCoverPart)
+  |> translate(y = -espCenterY + espCouponCoverOffsetY, z = couponCoverPrintZShift, global = true)
+
+couponExtendedClearanceEnvelope = clone(unitBox)
+  |> scale(
+       x = espClearWidth / 1mm,
+       y = espClearLength / 1mm,
+       z = espClearHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = couponCenterY, z = 0mm, global = true)
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 18,
+       metalness = 0,
+       opacity = 18,
+     )
+couponMbPhysicalGauge = clone(unitBox)
+  |> scale(
+       x = espMbPhysicalWidth / 1mm,
+       y = espMbPhysicalLength / 1mm,
+       z = espMbPhysicalHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = couponCenterY, z = 0mm, global = true)
+  |> appearance(
+       color = lipoYellow,
+       roughness = 20,
+       metalness = 0,
+       opacity = 26,
+     )
+couponBareGauge = clone(unitBox)
+  |> scale(
+       x = espBareInternalClearWidth / 1mm,
+       y = espBareInternalClearLength / 1mm,
+       z = espBareInternalClearHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = couponCenterY, z = -2mm, global = true)
+  |> appearance(
+       color = ledGreen,
+       roughness = 20,
+       metalness = 0,
+       opacity = 18,
+     )
+couponMbConnectorKeepout = clone(unitBox)
+  |> scale(
+       x = mbGenericConnectorAccessWidth / 1mm,
+       y = mbGenericConnectorAccessLength / 1mm,
+       z = 6mm / 1mm,
+       global = true,
+     )
+  |> translate(y = -espMbPhysicalLength / 2 + 5mm, z = espBoardCenterZ + 8mm, global = true)
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 20,
+       metalness = 0,
+       opacity = 38,
+     )
+couponMbResetKeepout = clone(unitBox)
+  |> scale(
+       x = mbGenericButtonAccessWidth / 1mm,
+       y = mbGenericButtonAccessLength / 1mm,
+       z = mbGenericButtonAccessHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -6mm,
+       y = 12mm,
+       z = espBoardCenterZ + 8mm,
+       global = true,
+     )
+  |> appearance(
+       color = ledRed,
+       roughness = 32,
+       metalness = 0,
+       opacity = 44,
+     )
+couponMbBootKeepout = clone(couponMbResetKeepout)
+  |> translate(x = 12mm, global = true)
+
+couponWidthDim = clone(unitBox)
+  |> scale(
+       x = espClearWidth / 1mm,
+       y = 0.8mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(y = -couponEndY - 8mm, z = espClearHeight / 2 + 6mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+couponLengthDim = clone(unitBox)
+  |> scale(
+       x = 0.8mm / 1mm,
+       y = espClearLength / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(x = couponSideX + 8mm, z = espClearHeight / 2 + 6mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+couponHeightDim = clone(unitBox)
+  |> scale(
+       x = 0.8mm / 1mm,
+       y = 0.8mm / 1mm,
+       z = espClearHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = couponSideX + 8mm,
+       y = -couponEndY - 8mm,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+
+esp32ToleranceCouponPrintable = flatten([couponTrayBodies, couponCoverPrint])
+esp32ToleranceCoupon = flatten([
+  couponTrayBodies,
+  couponCoverExploded,
+  couponExtendedClearanceEnvelope,
+  couponMbPhysicalGauge,
+  couponBareGauge,
+  couponMbConnectorKeepout,
+  couponMbResetKeepout,
+  couponMbBootKeepout,
+  couponWidthDim,
+  couponLengthDim,
+  couponHeightDim
+])
+
+export esp32ToleranceCouponPrintableExport = esp32ToleranceCouponPrintable
+export esp32ToleranceCouponExport = esp32ToleranceCoupon
+
+esp32ToleranceCoupon

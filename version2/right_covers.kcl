@@ -1,0 +1,179 @@
+// Right temple covers
+// Removable MB-ready controller cover with M2 counterbores, top vents, pull notch, and USB-C service plate.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+postX = espMountSpacingX / 2
+postY = espMountSpacingY / 2
+rightCoverZ = espClearHeight / 2 + coverThickness / 2
+rightCoverTopZ = rightCoverZ + coverThickness / 2
+rightCounterboreHeight = m2ScrewHeadHeight + csgOverlap
+rightCounterboreZ = rightCoverTopZ - (m2ScrewHeadHeight / 2) + csgOverlap / 2
+rightCoverRailZ = rightCoverZ + coverThickness / 2 + 0.35mm
+rightCoverRailX = espOuterWidth / 2 - 1.4mm
+espFloorTopZ = -espClearHeight / 2
+espFloorZ = espFloorTopZ - (wallThickness / 2)
+usbBayCenterZ = espFloorZ - (wallThickness / 2) - (usbBoardHeight / 2) - 1.1mm
+usbPlateZ = usbBayCenterZ - (usbBoardHeight / 2) - 2.3mm
+
+rightControllerCoverRaw = clone(unitBox)
+  |> scale(
+       x = (espOuterWidth - 1.2mm) / 1mm,
+       y = (espOuterLength - 1.2mm) / 1mm,
+       z = coverThickness / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY, z = rightCoverZ, global = true)
+  |> appearance(color = graphite, roughness = 74, metalness = 0)
+rightCoverScrewCut1 = clone(unitCylinder)
+  |> scale(
+       x = coverScrewClearanceDiameter / 1mm,
+       y = coverScrewClearanceDiameter / 1mm,
+       z = (coverThickness + 2 * csgOverlap) / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -postX,
+       y = espCenterY - postY,
+       z = rightCoverZ,
+       global = true,
+     )
+rightCoverScrewCut2 = clone(rightCoverScrewCut1)
+  |> translate(x = 2 * postX, global = true)
+rightCoverScrewCut3 = clone(rightCoverScrewCut1)
+  |> translate(y = 2 * postY, global = true)
+rightCoverScrewCut4 = clone(rightCoverScrewCut2)
+  |> translate(y = 2 * postY, global = true)
+rightCoverHeadCut1 = clone(unitCylinder)
+  |> scale(
+       x = coverScrewHeadDiameter / 1mm,
+       y = coverScrewHeadDiameter / 1mm,
+       z = rightCounterboreHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -postX,
+       y = espCenterY - postY,
+       z = rightCounterboreZ,
+       global = true,
+     )
+rightCoverHeadCut2 = clone(rightCoverHeadCut1)
+  |> translate(x = 2 * postX, global = true)
+rightCoverHeadCut3 = clone(rightCoverHeadCut1)
+  |> translate(y = 2 * postY, global = true)
+rightCoverHeadCut4 = clone(rightCoverHeadCut2)
+  |> translate(y = 2 * postY, global = true)
+rightVentSlot1 = clone(unitBox)
+  |> scale(
+       x = espVentSlotWidth / 1mm,
+       y = 22mm / 1mm,
+       z = (coverThickness + 2 * csgOverlap) / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -12.5mm,
+       y = espCenterY + 4mm,
+       z = rightCoverZ,
+       global = true,
+     )
+rightVentSlot2 = clone(rightVentSlot1)
+  |> translate(x = 5mm, global = true)
+rightVentSlot3 = clone(rightVentSlot1)
+  |> translate(x = 10mm, global = true)
+rightVentSlot4 = clone(rightVentSlot1)
+  |> translate(x = 15mm, global = true)
+rightVentSlot5 = clone(rightVentSlot1)
+  |> translate(x = 20mm, global = true)
+rightVentSlot6 = clone(rightVentSlot1)
+  |> translate(x = 25mm, global = true)
+rightCoverFingerNotch = clone(unitCylinder)
+  |> scale(
+       x = 7mm / 1mm,
+       y = 7mm / 1mm,
+       z = (coverThickness + 2 * csgOverlap) / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY + espOuterLength / 2 - 1.8mm, z = rightCoverZ, global = true)
+rightControllerCover = subtract(
+  [rightControllerCoverRaw],
+  tools = [
+    rightCoverScrewCut1,
+    rightCoverScrewCut2,
+    rightCoverScrewCut3,
+    rightCoverScrewCut4,
+    rightCoverHeadCut1,
+    rightCoverHeadCut2,
+    rightCoverHeadCut3,
+    rightCoverHeadCut4,
+    rightVentSlot1,
+    rightVentSlot2,
+    rightVentSlot3,
+    rightVentSlot4,
+    rightVentSlot5,
+    rightVentSlot6,
+    rightCoverFingerNotch
+  ],
+)
+rightCoverOuterSoftRail = clone(unitCylinder)
+  |> scale(
+       x = 1.8mm / 1mm,
+       y = 1.8mm / 1mm,
+       z = (espOuterLength - 2.4mm) / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = rightCoverRailX,
+       y = espCenterY,
+       z = rightCoverRailZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 74, metalness = 0)
+rightCoverInnerSoftRail = clone(rightCoverOuterSoftRail)
+  |> translate(x = -2 * rightCoverRailX, global = true)
+rightCoverCenterSpine = clone(unitBox)
+  |> scale(
+       x = 1.2mm / 1mm,
+       y = 43mm / 1mm,
+       z = 0.7mm / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY + 2mm, z = rightCoverTopZ + 0.35mm, global = true)
+  |> appearance(color = matteBlack, roughness = 80, metalness = 0)
+
+rightUsbServicePlateRaw = clone(unitBox)
+  |> scale(
+       x = 20mm / 1mm,
+       y = 18mm / 1mm,
+       z = 1.8mm / 1mm,
+       global = true,
+     )
+  |> translate(y = usbCenterY, z = usbPlateZ, global = true)
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+rightUsbPlateCut = clone(unitBox)
+  |> scale(
+       x = usbPortOpeningWidth / 1mm,
+       y = 6mm / 1mm,
+       z = 3mm / 1mm,
+       global = true,
+     )
+  |> translate(y = usbCenterY - (usbBoardLength / 2) + 4mm, z = usbPlateZ, global = true)
+rightUsbServicePlate = subtract([rightUsbServicePlateRaw], tools = [rightUsbPlateCut])
+
+rightControllerCoverPart = flatten([
+  rightControllerCover,
+  rightCoverOuterSoftRail,
+  rightCoverInnerSoftRail,
+  rightCoverCenterSpine
+])
+rightCoverBodies = flatten([
+  rightControllerCoverPart,
+  rightUsbServicePlate
+])
+
+export rightControllerCoverPartExport = rightControllerCoverPart
+export rightUsbServicePlateExport = rightUsbServicePlate
+export rightCoversExport = rightCoverBodies

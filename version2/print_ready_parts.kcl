@@ -1,0 +1,77 @@
+// Print-ready smart glasses parts
+// All printable glasses parts arranged inside a 220 x 220 mm FDM build area without non-print reference geometry.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import frontFramePrintedExport as frontFrame from "front_frame.kcl"
+import rightTempleExport as rightTemple from "right_temple.kcl"
+import leftTempleExport as leftTemple from "left_temple.kcl"
+import rightControllerCoverPartExport as rightControllerCoverPart from "right_covers.kcl"
+import rightUsbServicePlateExport as rightUsbServicePlate from "right_covers.kcl"
+import leftBatteryCoverPartExport as leftBatteryCoverPart from "left_covers.kcl"
+
+rightControllerCoverTargetY = 0mm
+leftBatteryCoverTargetY = 66mm
+usbServicePlateTargetY = -45mm
+
+frontFramePrint = frontFrame
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = 0mm,
+       y = -80mm,
+       z = 3.6mm,
+       global = true,
+     )
+
+leftTemplePrint = leftTemple
+  |> translate(
+       x = -63mm,
+       y = 25mm,
+       z = 14mm,
+       global = true,
+     )
+
+rightTemplePrint = rightTemple
+  |> translate(
+       x = 63mm,
+       y = 25mm,
+       z = 26mm,
+       global = true,
+     )
+
+leftBatteryCoverPrint = leftBatteryCoverPart
+  |> translate(
+       x = 0mm,
+       y = leftBatteryCoverTargetY - batteryCenterY,
+       z = -4mm,
+       global = true,
+     )
+
+rightControllerCoverPrint = rightControllerCoverPart
+  |> translate(
+       x = 0mm,
+       y = rightControllerCoverTargetY - espCenterY,
+       z = -7.2mm,
+       global = true,
+     )
+
+rightUsbServicePlatePrint = rightUsbServicePlate
+  |> translate(
+       x = 0mm,
+       y = usbServicePlateTargetY - usbCenterY,
+       z = 26mm,
+       global = true,
+     )
+
+printReadyParts = flatten([
+  frontFramePrint,
+  leftTemplePrint,
+  rightTemplePrint,
+  leftBatteryCoverPrint,
+  rightControllerCoverPrint,
+  rightUsbServicePlatePrint
+])
+
+export printReadyPartsExport = printReadyParts
+
+printReadyParts

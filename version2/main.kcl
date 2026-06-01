@@ -1,0 +1,7 @@
+// Smart glasses print package
+// Clean entrypoint showing only the STL-ready printable parts layout.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import printReadyPartsExport as printReadyParts from "print_ready_parts.kcl"
+
+printReadyParts

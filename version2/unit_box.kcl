@@ -1,0 +1,30 @@
+// Unit box primitive
+// Origin-centered one-millimeter cube for scalable prismatic features.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+unitBoxSketch = sketch(on = XY) {
+  unitBoxCenter = point(at = [var 0mm, var 0mm])
+  unitBoxLower = line(start = [var -0.5mm, var -0.5mm], end = [var 0.5mm, var -0.5mm])
+  unitBoxRight = line(start = [var 0.5mm, var -0.5mm], end = [var 0.5mm, var 0.5mm])
+  unitBoxUpper = line(start = [var 0.5mm, var 0.5mm], end = [var -0.5mm, var 0.5mm])
+  unitBoxLeft = line(start = [var -0.5mm, var 0.5mm], end = [var -0.5mm, var -0.5mm])
+  coincident([unitBoxLower.end, unitBoxRight.start])
+  coincident([unitBoxRight.end, unitBoxUpper.start])
+  coincident([unitBoxUpper.end, unitBoxLeft.start])
+  coincident([unitBoxLeft.end, unitBoxLower.start])
+  coincident([unitBoxCenter, ORIGIN])
+  horizontal(unitBoxLower)
+  vertical(unitBoxRight)
+  horizontal(unitBoxUpper)
+  vertical(unitBoxLeft)
+  horizontalDistance([unitBoxCenter, unitBoxLower.start]) == -0.5mm
+  verticalDistance([unitBoxCenter, unitBoxLower.start]) == -0.5mm
+  horizontalDistance([unitBoxCenter, unitBoxRight.end]) == 0.5mm
+  verticalDistance([unitBoxCenter, unitBoxRight.end]) == 0.5mm
+}
+
+unitBoxRegion = region(point = [0mm, 0mm], sketch = unitBoxSketch)
+unitBoxBody = extrude(unitBoxRegion, length = 1mm, symmetric = true)
+unitBoxSketchHidden = hide(unitBoxSketch)
+
+export unitBoxExport = unitBoxBody

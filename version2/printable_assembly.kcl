@@ -1,0 +1,35 @@
+// Printable smart glasses assembly check
+// Clean assembled view using only printable parts for fit and cover alignment review.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import frontFramePrintedExport as frontFrame from "front_frame.kcl"
+import rightTempleExport as rightTemple from "right_temple.kcl"
+import leftTempleExport as leftTemple from "left_temple.kcl"
+import rightCoversExport as rightCovers from "right_covers.kcl"
+import leftCoversExport as leftCovers from "left_covers.kcl"
+
+rightTempleX = hingeCenterX + 7mm
+leftTempleX = -hingeCenterX - 7mm
+
+frontFrameAssembled = frontFrame
+rightTempleAssembled = rightTemple
+  |> translate(x = rightTempleX, y = templeAssemblyCenterY, global = true)
+leftTempleAssembled = leftTemple
+  |> translate(x = leftTempleX, y = templeAssemblyCenterY, global = true)
+rightCoversAssembled = rightCovers
+  |> translate(x = rightTempleX, y = templeAssemblyCenterY, global = true)
+leftCoversAssembled = leftCovers
+  |> translate(x = leftTempleX, y = templeAssemblyCenterY, global = true)
+
+printableAssembly = flatten([
+  frontFrameAssembled,
+  rightTempleAssembled,
+  leftTempleAssembled,
+  rightCoversAssembled,
+  leftCoversAssembled
+])
+
+export printableAssemblyExport = printableAssembly
+
+printableAssembly
