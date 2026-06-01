@@ -1,0 +1,122 @@
+// Smart glasses parameters
+// Shared dimensions, hardware clearances, and material colors.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+export frameWidth = 143mm
+export frameHeight = 48mm
+export frontFrameThickness = 6mm
+export lensWidth = 50mm
+export lensHeight = 42mm
+export bridgeWidth = 18mm
+export lensCenterX = bridgeWidth / 2 + lensWidth / 2
+export rimBeam = 4mm
+export browBeam = 5mm
+export wallThickness = 3mm
+export templeLength = 145mm
+export templeHalfLength = templeLength / 2
+export hingeCenterX = frameWidth / 2 - 2mm
+export hingeBlockWidth = 7mm
+export hingeBlockHeight = 22mm
+export hingeBlockDepth = 10mm
+export templeAssemblyCenterY = frontFrameThickness / 2 + templeHalfLength
+
+export rightTempleHousingWidth = 34mm
+export rightTempleHousingHeight = 21mm
+export rightTempleTailWidth = 14mm
+export rightTempleTailHeight = 9.5mm
+export leftTempleHousingWidth = 28mm
+export leftTempleHousingHeight = 16mm
+export leftTempleTailWidth = 14mm
+export leftTempleTailHeight = 9.5mm
+export rightTempleTransitionWidth = 23mm
+export rightTempleTransitionHeight = 12mm
+export rightTempleTransitionLength = 38mm
+export leftTempleTransitionWidth = 22mm
+export leftTempleTransitionHeight = 11mm
+export leftTempleTransitionLength = 38mm
+export slimTempleRailDiameter = 2.8mm
+export consumerShellThickness = 1.2mm
+
+export espClearLength = 41mm
+export espClearWidth = 28mm
+export espClearHeight = 15mm
+export espOuterLength = espClearLength + 2 * wallThickness
+export espOuterWidth = espClearWidth + 2 * wallThickness
+export espOuterHeight = espClearHeight + 2 * wallThickness
+export espCenterY = -templeHalfLength + 29mm
+export espBoardLength = 40.5mm
+export espBoardWidth = 27mm
+export espBoardHeight = 4.5mm
+
+export batteryClearLength = 60mm
+export batteryClearWidth = 20mm
+export batteryClearHeight = 8mm
+export batteryOuterLength = batteryClearLength + 2 * wallThickness
+export batteryOuterWidth = batteryClearWidth + 2 * wallThickness
+export batteryOuterHeight = batteryClearHeight + 2 * wallThickness
+export batteryCenterY = -templeHalfLength + 42mm
+
+export usbBoardLength = 22.1mm
+export usbBoardWidth = 14mm
+export usbBoardHeight = 4.9mm
+export usbPortOpeningWidth = 10mm
+export usbPortOpeningHeight = 4mm
+export usbCenterY = espCenterY - 15mm
+
+export cameraLensOpeningDiameter = 6mm
+export cameraBezelDiameter = 12mm
+export cameraPodWidth = 15mm
+export cameraPodHeight = 19mm
+export cameraCenterX = lensCenterX + lensWidth / 2 + rimBeam + 2mm
+export cameraCenterZ = 10mm
+
+export noseSaddleClearanceWidth = 20mm
+export noseSaddleClearanceHeight = 24mm
+export noseSaddleCenterZ = -16mm
+export nosePadCenterX = 10.5mm
+export nosePadCenterZ = -15.5mm
+export nosePadContactWidth = 7mm
+export nosePadProjection = 3.6mm
+export nosePadHeight = 17mm
+export nosePadStemWidth = 3.2mm
+export noseBridgeArchDiameter = 4.6mm
+
+export ledWindowWidth = 8mm
+export ledWindowHeight = 3mm
+export buttonWidth = 8mm
+export buttonHeight = 5mm
+export buttonTravelGuardHeight = 7mm
+
+export m2ScrewDiameter = 2mm
+export m2ClearanceDiameter = 2.4mm
+export m2HeatSetInsertOuterDiameter = 3.5mm
+export m2HeatSetInsertHoleDiameter = 3.2mm
+export m2HeatSetInsertLength = 4mm
+export m2CoverScrewLength = 10mm
+export m2ScrewHeadDiameter = 4.2mm
+export m2ScrewHeadHeight = 1.2mm
+export usbBoardPilotDiameter = 1.6mm
+export usbBoardPilotDepth = 3mm
+
+export coverThickness = 2.6mm
+export coverScrewClearanceDiameter = m2ClearanceDiameter
+export coverScrewHeadDiameter = 5mm
+export bossOuterDiameter = 5.8mm
+export bossPilotDiameter = 1.8mm
+export csgOverlap = 0.6mm
+
+export printableBlack = "#20242a"
+export matteBlack = "#111315"
+export graphite = "#2f353d"
+export translucentSmoke = "#5d6a76"
+export rubberDark = "#111111"
+export pcbGreen = "#1b7f43"
+export copperGold = "#d69c2f"
+export lipoSilver = "#b9bec4"
+export lipoYellow = "#f0c94d"
+export hardwareSteel = "#a8afb8"
+export lensTint = "#92a8b8"
+export ledGreen = "#38e870"
+export ledRed = "#e54848"
+export blueprintBlue = "#2f78d6"
+export clearanceCyan = "#3fd1ff"

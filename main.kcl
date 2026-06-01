@@ -1,0 +1,134 @@
+// ESP32-CAM smart glasses prototype
+// Assembled CAD, exploded service view, dimensions, fasteners, print layout, and showcase.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import frontFrameExport as frontFrame from "front_frame.kcl"
+import frontFrameExport as frontFrameExplodeSource from "front_frame.kcl"
+import rightTempleExport as rightTemple from "right_temple.kcl"
+import rightTempleExport as rightTempleExplodeSource from "right_temple.kcl"
+import leftTempleExport as leftTemple from "left_temple.kcl"
+import leftTempleExport as leftTempleExplodeSource from "left_temple.kcl"
+import rightCoversExport as rightCovers from "right_covers.kcl"
+import rightCoversExport as rightCoversExplodeSource from "right_covers.kcl"
+import leftCoversExport as leftCovers from "left_covers.kcl"
+import leftCoversExport as leftCoversExplodeSource from "left_covers.kcl"
+import frontElectronicsExport as frontElectronics from "front_electronics.kcl"
+import frontElectronicsExport as frontElectronicsExplodeSource from "front_electronics.kcl"
+import rightElectronicsExport as rightElectronics from "right_electronics.kcl"
+import rightElectronicsExport as rightElectronicsExplodeSource from "right_electronics.kcl"
+import leftElectronicsExport as leftElectronics from "left_electronics.kcl"
+import leftElectronicsExport as leftElectronicsExplodeSource from "left_electronics.kcl"
+import hardwareExport as hardware from "hardware.kcl"
+import hardwareExport as hardwareExplodeSource from "hardware.kcl"
+import blueprintExport as blueprint from "dimension_blueprint.kcl"
+import fastenerCalloutsExport as fastenerCallouts from "fastener_callouts.kcl"
+import finishedShowcaseExport as finishedShowcase from "finished_showcase.kcl"
+import printOrientationLayoutExport as printOrientationLayout from "print_orientation_layout.kcl"
+
+rightTempleX = hingeCenterX + 7mm
+leftTempleX = -hingeCenterX - 7mm
+explodedShiftX = 255mm
+blueprintShiftX = -305mm
+finishedShowcaseShiftY = -245mm
+printLayoutShiftY = 295mm
+
+frontFrameAssembled = frontFrame
+rightTempleAssembled = rightTemple
+  |> translate(x = rightTempleX, y = templeAssemblyCenterY, global = true)
+leftTempleAssembled = leftTemple
+  |> translate(x = leftTempleX, y = templeAssemblyCenterY, global = true)
+rightCoversAssembled = rightCovers
+  |> translate(x = rightTempleX, y = templeAssemblyCenterY, global = true)
+leftCoversAssembled = leftCovers
+  |> translate(x = leftTempleX, y = templeAssemblyCenterY, global = true)
+frontElectronicsAssembled = frontElectronics
+rightElectronicsAssembled = rightElectronics
+  |> translate(x = rightTempleX, y = templeAssemblyCenterY, global = true)
+leftElectronicsAssembled = leftElectronics
+  |> translate(x = leftTempleX, y = templeAssemblyCenterY, global = true)
+hardwareAssembled = hardware
+fastenerCalloutsPanel = fastenerCallouts
+
+// Exploded service layout: covers lift up, electronics float above pockets, temples move outward.
+frontFrameExploded = frontFrameExplodeSource
+  |> translate(x = explodedShiftX, global = true)
+rightTempleExploded = rightTempleExplodeSource
+  |> translate(x = explodedShiftX + rightTempleX + 36mm, y = templeAssemblyCenterY, global = true)
+leftTempleExploded = leftTempleExplodeSource
+  |> translate(x = explodedShiftX + leftTempleX - 36mm, y = templeAssemblyCenterY, global = true)
+rightCoversExploded = rightCoversExplodeSource
+  |> translate(
+       x = explodedShiftX + rightTempleX + 36mm,
+       y = templeAssemblyCenterY,
+       z = 33mm,
+       global = true,
+     )
+leftCoversExploded = leftCoversExplodeSource
+  |> translate(
+       x = explodedShiftX + leftTempleX - 36mm,
+       y = templeAssemblyCenterY,
+       z = 28mm,
+       global = true,
+     )
+frontElectronicsExploded = frontElectronicsExplodeSource
+  |> translate(x = explodedShiftX, z = 24mm, global = true)
+rightElectronicsExploded = rightElectronicsExplodeSource
+  |> translate(
+       x = explodedShiftX + rightTempleX + 18mm,
+       y = templeAssemblyCenterY,
+       z = 19mm,
+       global = true,
+     )
+leftElectronicsExploded = leftElectronicsExplodeSource
+  |> translate(
+       x = explodedShiftX + leftTempleX - 18mm,
+       y = templeAssemblyCenterY,
+       z = 17mm,
+       global = true,
+     )
+hardwareExploded = hardwareExplodeSource
+  |> translate(x = explodedShiftX, z = 38mm, global = true)
+
+blueprintPanel = blueprint
+  |> translate(
+       x = blueprintShiftX,
+       y = -35mm,
+       z = -6mm,
+       global = true,
+     )
+
+// Finished closed exterior view for stakeholder/show-and-tell render shots.
+finishedShowcaseClosed = finishedShowcase
+  |> translate(y = finishedShowcaseShiftY, global = true)
+
+// Printable arrangement for a 220 x 220 mm FDM bed.
+printOrientationPanel = printOrientationLayout
+  |> translate(y = printLayoutShiftY, global = true)
+
+smartGlassesPresentation = flatten([
+  frontFrameAssembled,
+  rightTempleAssembled,
+  leftTempleAssembled,
+  rightCoversAssembled,
+  leftCoversAssembled,
+  frontElectronicsAssembled,
+  rightElectronicsAssembled,
+  leftElectronicsAssembled,
+  hardwareAssembled,
+  fastenerCalloutsPanel,
+  frontFrameExploded,
+  rightTempleExploded,
+  leftTempleExploded,
+  rightCoversExploded,
+  leftCoversExploded,
+  frontElectronicsExploded,
+  rightElectronicsExploded,
+  leftElectronicsExploded,
+  hardwareExploded,
+  blueprintPanel,
+  finishedShowcaseClosed,
+  printOrientationPanel
+])
+
+smartGlassesPresentation

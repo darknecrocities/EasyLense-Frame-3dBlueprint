@@ -1,0 +1,135 @@
+// Front electronics
+// OV2640 camera module, front LED indicators, light pipes, and flex routing.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+cameraModulePcb = clone(unitBox)
+  |> scale(
+       x = 10mm / 1mm,
+       y = 1.2mm / 1mm,
+       z = 10mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraCenterX,
+       y = 2mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+  |> appearance(color = pcbGreen, roughness = 54, metalness = 0)
+cameraSensorPackage = clone(unitBox)
+  |> scale(
+       x = 6.4mm / 1mm,
+       y = 1.4mm / 1mm,
+       z = 6.4mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraCenterX,
+       y = 0.7mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 56, metalness = 0)
+ov2640LensBarrel = clone(unitCylinder)
+  |> scale(
+       x = 5.5mm / 1mm,
+       y = 5.5mm / 1mm,
+       z = 4mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = cameraCenterX,
+       y = -2.1mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 28, metalness = 0)
+cameraFlexCable = clone(unitBox)
+  |> scale(
+       x = 3.8mm / 1mm,
+       y = 1.0mm / 1mm,
+       z = 41mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = Y, angle = 72deg, global = true)
+  |> translate(
+       x = cameraCenterX + 10mm,
+       y = 2.2mm,
+       z = cameraCenterZ - 14mm,
+       global = true,
+     )
+  |> appearance(color = "#e1b64a", roughness = 54, metalness = 0)
+ledPcb = clone(unitBox)
+  |> scale(
+       x = 12mm / 1mm,
+       y = 1.1mm / 1mm,
+       z = 5mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 45mm,
+       y = 2.2mm,
+       z = -18mm,
+       global = true,
+     )
+  |> appearance(color = pcbGreen, roughness = 54, metalness = 0)
+powerLed = clone(unitCylinder)
+  |> scale(
+       x = 2mm / 1mm,
+       y = 2mm / 1mm,
+       z = 0.7mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = 42.5mm,
+       y = -3.6mm,
+       z = -18mm,
+       global = true,
+     )
+  |> appearance(
+       color = ledGreen,
+       roughness = 25,
+       metalness = 0,
+       opacity = 70,
+     )
+recordLed = clone(powerLed)
+  |> translate(x = 5mm, global = true)
+  |> appearance(
+       color = ledRed,
+       roughness = 25,
+       metalness = 0,
+       opacity = 70,
+     )
+rightHingeFlexRun = clone(unitBox)
+  |> scale(
+       x = 18mm / 1mm,
+       y = 1.1mm / 1mm,
+       z = 2.2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = hingeCenterX - 10mm,
+       y = 2mm,
+       z = 8mm,
+       global = true,
+     )
+  |> appearance(color = "#e1b64a", roughness = 54, metalness = 0)
+
+frontElectronicsBodies = flatten([
+  cameraModulePcb,
+  cameraSensorPackage,
+  ov2640LensBarrel,
+  cameraFlexCable,
+  ledPcb,
+  powerLed,
+  recordLed,
+  rightHingeFlexRun
+])
+
+export frontElectronicsExport = frontElectronicsBodies

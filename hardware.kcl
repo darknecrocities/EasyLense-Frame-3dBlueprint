@@ -1,0 +1,258 @@
+// Hinge hardware and cover fasteners
+// Metal hinge leaves, pins, M2 cover screws, and heat-set insert envelopes.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+hingePinY = frontFrameThickness / 2 + 1mm
+hingeLeafZ = 0mm
+hingePinDiameter = 2.2mm
+hingePinHeight = 21mm
+rightTempleX = hingeCenterX + 7mm
+leftTempleX = -hingeCenterX - 7mm
+rightPostX = espClearWidth / 2 - 4mm
+rightPostY = espClearLength / 2 - 5mm
+leftPostX = batteryClearWidth / 2 - 3.5mm
+leftPostY = batteryClearLength / 2 - 5mm
+rightCoverTopZ = espClearHeight / 2 + coverThickness
+leftCoverTopZ = batteryClearHeight / 2 + coverThickness
+rightScrewShaftZ = rightCoverTopZ - m2ScrewHeadHeight - (m2CoverScrewLength / 2)
+leftScrewShaftZ = leftCoverTopZ - m2ScrewHeadHeight - (m2CoverScrewLength / 2)
+rightScrewHeadZ = rightCoverTopZ - (m2ScrewHeadHeight / 2)
+leftScrewHeadZ = leftCoverTopZ - (m2ScrewHeadHeight / 2)
+rightInsertZ = -espClearHeight / 2 + 3.9mm + 4mm - (m2HeatSetInsertLength / 2)
+leftInsertZ = -batteryClearHeight / 2 + 3.2mm + 3.5mm - (m2HeatSetInsertLength / 2)
+
+rightHingePin = clone(unitCylinder)
+  |> scale(
+       x = hingePinDiameter / 1mm,
+       y = hingePinDiameter / 1mm,
+       z = hingePinHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = hingeCenterX,
+       y = hingePinY,
+       z = hingeLeafZ,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 28, metalness = 85)
+leftHingePin = clone(rightHingePin)
+  |> translate(x = -2 * hingeCenterX, global = true)
+rightFrameHingeLeaf = clone(unitBox)
+  |> scale(
+       x = 5mm / 1mm,
+       y = 1.6mm / 1mm,
+       z = 17mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = hingeCenterX,
+       y = -1mm,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 28, metalness = 85)
+rightTempleHingeLeaf = clone(rightFrameHingeLeaf)
+  |> translate(y = 8mm, global = true)
+leftFrameHingeLeaf = clone(rightFrameHingeLeaf)
+  |> translate(x = -2 * hingeCenterX, global = true)
+leftTempleHingeLeaf = clone(rightTempleHingeLeaf)
+  |> translate(x = -2 * hingeCenterX, global = true)
+
+rightHingeScrewHeadA = clone(unitCylinder)
+  |> scale(
+       x = 4.2mm / 1mm,
+       y = 4.2mm / 1mm,
+       z = 0.9mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = hingeCenterX,
+       y = -2.2mm,
+       z = 5.5mm,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 30, metalness = 80)
+rightHingeScrewHeadB = clone(rightHingeScrewHeadA)
+  |> translate(z = -11mm, global = true)
+rightTempleScrewHeadA = clone(rightHingeScrewHeadA)
+  |> translate(y = 10mm, global = true)
+rightTempleScrewHeadB = clone(rightTempleScrewHeadA)
+  |> translate(z = -11mm, global = true)
+leftHingeScrewHeadA = clone(rightHingeScrewHeadA)
+  |> translate(x = -2 * hingeCenterX, global = true)
+leftHingeScrewHeadB = clone(rightHingeScrewHeadB)
+  |> translate(x = -2 * hingeCenterX, global = true)
+leftTempleScrewHeadA = clone(rightTempleScrewHeadA)
+  |> translate(x = -2 * hingeCenterX, global = true)
+leftTempleScrewHeadB = clone(rightTempleScrewHeadB)
+  |> translate(x = -2 * hingeCenterX, global = true)
+
+rightCoverScrewShaft1 = clone(unitCylinder)
+  |> scale(
+       x = m2ScrewDiameter / 1mm,
+       y = m2ScrewDiameter / 1mm,
+       z = m2CoverScrewLength / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = rightTempleX - rightPostX,
+       y = templeAssemblyCenterY + espCenterY - rightPostY,
+       z = rightScrewShaftZ,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 30, metalness = 85)
+rightCoverScrewShaft2 = clone(rightCoverScrewShaft1)
+  |> translate(x = 2 * rightPostX, global = true)
+rightCoverScrewShaft3 = clone(rightCoverScrewShaft1)
+  |> translate(y = 2 * rightPostY, global = true)
+rightCoverScrewShaft4 = clone(rightCoverScrewShaft2)
+  |> translate(y = 2 * rightPostY, global = true)
+rightCoverScrewHead1 = clone(unitCylinder)
+  |> scale(
+       x = m2ScrewHeadDiameter / 1mm,
+       y = m2ScrewHeadDiameter / 1mm,
+       z = m2ScrewHeadHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = rightTempleX - rightPostX,
+       y = templeAssemblyCenterY + espCenterY - rightPostY,
+       z = rightScrewHeadZ,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 30, metalness = 85)
+rightCoverScrewHead2 = clone(rightCoverScrewHead1)
+  |> translate(x = 2 * rightPostX, global = true)
+rightCoverScrewHead3 = clone(rightCoverScrewHead1)
+  |> translate(y = 2 * rightPostY, global = true)
+rightCoverScrewHead4 = clone(rightCoverScrewHead2)
+  |> translate(y = 2 * rightPostY, global = true)
+rightHeatInsert1 = clone(unitCylinder)
+  |> scale(
+       x = m2HeatSetInsertOuterDiameter / 1mm,
+       y = m2HeatSetInsertOuterDiameter / 1mm,
+       z = m2HeatSetInsertLength / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = rightTempleX - rightPostX,
+       y = templeAssemblyCenterY + espCenterY - rightPostY,
+       z = rightInsertZ,
+       global = true,
+     )
+  |> appearance(color = copperGold, roughness = 34, metalness = 60)
+rightHeatInsert2 = clone(rightHeatInsert1)
+  |> translate(x = 2 * rightPostX, global = true)
+rightHeatInsert3 = clone(rightHeatInsert1)
+  |> translate(y = 2 * rightPostY, global = true)
+rightHeatInsert4 = clone(rightHeatInsert2)
+  |> translate(y = 2 * rightPostY, global = true)
+
+leftCoverScrewShaft1 = clone(unitCylinder)
+  |> scale(
+       x = m2ScrewDiameter / 1mm,
+       y = m2ScrewDiameter / 1mm,
+       z = m2CoverScrewLength / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftTempleX - leftPostX,
+       y = templeAssemblyCenterY + batteryCenterY - leftPostY,
+       z = leftScrewShaftZ,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 30, metalness = 85)
+leftCoverScrewShaft2 = clone(leftCoverScrewShaft1)
+  |> translate(x = 2 * leftPostX, global = true)
+leftCoverScrewShaft3 = clone(leftCoverScrewShaft1)
+  |> translate(y = 2 * leftPostY, global = true)
+leftCoverScrewShaft4 = clone(leftCoverScrewShaft2)
+  |> translate(y = 2 * leftPostY, global = true)
+leftCoverScrewHead1 = clone(unitCylinder)
+  |> scale(
+       x = m2ScrewHeadDiameter / 1mm,
+       y = m2ScrewHeadDiameter / 1mm,
+       z = m2ScrewHeadHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftTempleX - leftPostX,
+       y = templeAssemblyCenterY + batteryCenterY - leftPostY,
+       z = leftScrewHeadZ,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 30, metalness = 85)
+leftCoverScrewHead2 = clone(leftCoverScrewHead1)
+  |> translate(x = 2 * leftPostX, global = true)
+leftCoverScrewHead3 = clone(leftCoverScrewHead1)
+  |> translate(y = 2 * leftPostY, global = true)
+leftCoverScrewHead4 = clone(leftCoverScrewHead2)
+  |> translate(y = 2 * leftPostY, global = true)
+leftHeatInsert1 = clone(unitCylinder)
+  |> scale(
+       x = m2HeatSetInsertOuterDiameter / 1mm,
+       y = m2HeatSetInsertOuterDiameter / 1mm,
+       z = m2HeatSetInsertLength / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftTempleX - leftPostX,
+       y = templeAssemblyCenterY + batteryCenterY - leftPostY,
+       z = leftInsertZ,
+       global = true,
+     )
+  |> appearance(color = copperGold, roughness = 34, metalness = 60)
+leftHeatInsert2 = clone(leftHeatInsert1)
+  |> translate(x = 2 * leftPostX, global = true)
+leftHeatInsert3 = clone(leftHeatInsert1)
+  |> translate(y = 2 * leftPostY, global = true)
+leftHeatInsert4 = clone(leftHeatInsert2)
+  |> translate(y = 2 * leftPostY, global = true)
+
+hardwareBodies = flatten([
+  rightHingePin,
+  leftHingePin,
+  rightFrameHingeLeaf,
+  rightTempleHingeLeaf,
+  leftFrameHingeLeaf,
+  leftTempleHingeLeaf,
+  rightHingeScrewHeadA,
+  rightHingeScrewHeadB,
+  rightTempleScrewHeadA,
+  rightTempleScrewHeadB,
+  leftHingeScrewHeadA,
+  leftHingeScrewHeadB,
+  leftTempleScrewHeadA,
+  leftTempleScrewHeadB,
+  rightCoverScrewShaft1,
+  rightCoverScrewShaft2,
+  rightCoverScrewShaft3,
+  rightCoverScrewShaft4,
+  rightCoverScrewHead1,
+  rightCoverScrewHead2,
+  rightCoverScrewHead3,
+  rightCoverScrewHead4,
+  rightHeatInsert1,
+  rightHeatInsert2,
+  rightHeatInsert3,
+  rightHeatInsert4,
+  leftCoverScrewShaft1,
+  leftCoverScrewShaft2,
+  leftCoverScrewShaft3,
+  leftCoverScrewShaft4,
+  leftCoverScrewHead1,
+  leftCoverScrewHead2,
+  leftCoverScrewHead3,
+  leftCoverScrewHead4,
+  leftHeatInsert1,
+  leftHeatInsert2,
+  leftHeatInsert3,
+  leftHeatInsert4
+])
+
+export hardwareExport = hardwareBodies

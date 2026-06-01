@@ -1,0 +1,113 @@
+// Left temple covers
+// Removable LiPo battery cover with M2 counterbores, softened edges, and finger notch.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+batteryPostX = batteryClearWidth / 2 - 3.5mm
+batteryPostY = batteryClearLength / 2 - 5mm
+batteryCoverZ = batteryClearHeight / 2 + coverThickness / 2
+batteryCoverTopZ = batteryCoverZ + coverThickness / 2
+batteryCounterboreHeight = m2ScrewHeadHeight + csgOverlap
+batteryCounterboreZ = batteryCoverTopZ - (m2ScrewHeadHeight / 2) + csgOverlap / 2
+batteryCoverRailZ = batteryCoverZ + coverThickness / 2 + 0.35mm
+batteryCoverRailX = batteryOuterWidth / 2 - 1.3mm
+
+leftBatteryCoverRaw = clone(unitBox)
+  |> scale(
+       x = (batteryOuterWidth - 1.2mm) / 1mm,
+       y = (batteryOuterLength - 1.2mm) / 1mm,
+       z = coverThickness / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY, z = batteryCoverZ, global = true)
+  |> appearance(color = graphite, roughness = 74, metalness = 0)
+leftCoverScrewCut1 = clone(unitCylinder)
+  |> scale(
+       x = coverScrewClearanceDiameter / 1mm,
+       y = coverScrewClearanceDiameter / 1mm,
+       z = (coverThickness + 2 * csgOverlap) / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -batteryPostX,
+       y = batteryCenterY - batteryPostY,
+       z = batteryCoverZ,
+       global = true,
+     )
+leftCoverScrewCut2 = clone(leftCoverScrewCut1)
+  |> translate(x = 2 * batteryPostX, global = true)
+leftCoverScrewCut3 = clone(leftCoverScrewCut1)
+  |> translate(y = 2 * batteryPostY, global = true)
+leftCoverScrewCut4 = clone(leftCoverScrewCut2)
+  |> translate(y = 2 * batteryPostY, global = true)
+leftCoverHeadCut1 = clone(unitCylinder)
+  |> scale(
+       x = coverScrewHeadDiameter / 1mm,
+       y = coverScrewHeadDiameter / 1mm,
+       z = batteryCounterboreHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -batteryPostX,
+       y = batteryCenterY - batteryPostY,
+       z = batteryCounterboreZ,
+       global = true,
+     )
+leftCoverHeadCut2 = clone(leftCoverHeadCut1)
+  |> translate(x = 2 * batteryPostX, global = true)
+leftCoverHeadCut3 = clone(leftCoverHeadCut1)
+  |> translate(y = 2 * batteryPostY, global = true)
+leftCoverHeadCut4 = clone(leftCoverHeadCut2)
+  |> translate(y = 2 * batteryPostY, global = true)
+leftCoverFingerNotch = clone(unitCylinder)
+  |> scale(
+       x = 7mm / 1mm,
+       y = 7mm / 1mm,
+       z = (coverThickness + 2 * csgOverlap) / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY + batteryOuterLength / 2 - 2mm, z = batteryCoverZ, global = true)
+leftBatteryCover = subtract(
+  [leftBatteryCoverRaw],
+  tools = [
+    leftCoverScrewCut1,
+    leftCoverScrewCut2,
+    leftCoverScrewCut3,
+    leftCoverScrewCut4,
+    leftCoverHeadCut1,
+    leftCoverHeadCut2,
+    leftCoverHeadCut3,
+    leftCoverHeadCut4,
+    leftCoverFingerNotch
+  ],
+)
+leftCoverOuterSoftRail = clone(unitCylinder)
+  |> scale(
+       x = 1.8mm / 1mm,
+       y = 1.8mm / 1mm,
+       z = (batteryOuterLength - 2.4mm) / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = -batteryCoverRailX,
+       y = batteryCenterY,
+       z = batteryCoverRailZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 74, metalness = 0)
+leftCoverInnerSoftRail = clone(leftCoverOuterSoftRail)
+  |> translate(x = 2 * batteryCoverRailX, global = true)
+
+leftBatteryCoverPart = flatten([
+  leftBatteryCover,
+  leftCoverOuterSoftRail,
+  leftCoverInnerSoftRail
+])
+leftCoverBodies = flatten([leftBatteryCoverPart])
+
+export leftBatteryCoverPartExport = leftBatteryCoverPart
+export leftCoversExport = leftCoverBodies

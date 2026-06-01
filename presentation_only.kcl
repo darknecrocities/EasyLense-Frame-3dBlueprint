@@ -1,0 +1,11 @@
+// Presentation-only smart glasses
+// Clean finished non-audio prototype view without blueprint, exploded, or print-layout panels.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import finishedShowcaseExport as finishedShowcase from "finished_showcase.kcl"
+
+presentationOnlySmartGlasses = finishedShowcase
+
+export presentationOnlySmartGlassesExport = presentationOnlySmartGlasses
+
+presentationOnlySmartGlasses

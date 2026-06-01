@@ -1,0 +1,336 @@
+// Left temple printed body
+// LiPo battery housing, cable route, balanced support, and slim non-audio rear arm.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+batteryFloorZ = -batteryClearHeight / 2 - (wallThickness / 2)
+batteryTopLipZ = batteryClearHeight / 2 + wallThickness / 2
+batterySideX = batteryClearWidth / 2 + wallThickness / 2
+batteryEndY = batteryClearLength / 2 + wallThickness / 2
+batteryPostX = batteryClearWidth / 2 - 3.5mm
+batteryPostY = batteryClearLength / 2 - 5mm
+batteryPostZ = -batteryClearHeight / 2 + 3.2mm
+m2InsertSocketHeight = m2HeatSetInsertLength + csgOverlap
+batteryPostTopZ = batteryPostZ + 3.5mm
+batteryInsertSocketZ = batteryPostTopZ - (m2HeatSetInsertLength / 2) + csgOverlap / 2
+tailBeamCenterY = 37mm
+tailBeamLength = 72mm
+rearComfortCenterY = templeHalfLength - 25mm
+rearComfortCenterZ = -2mm
+
+leftBatteryFloor = clone(unitBox)
+  |> scale(
+       x = batteryOuterWidth / 1mm,
+       y = batteryOuterLength / 1mm,
+       z = wallThickness / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY, z = batteryFloorZ, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+leftBatteryOuterWall = clone(unitBox)
+  |> scale(
+       x = wallThickness / 1mm,
+       y = batteryOuterLength / 1mm,
+       z = batteryOuterHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -batterySideX,
+       y = batteryCenterY,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+leftBatteryInnerWall = clone(leftBatteryOuterWall)
+  |> translate(x = 2 * batterySideX, global = true)
+leftBatteryFrontWall = clone(unitBox)
+  |> scale(
+       x = batteryOuterWidth / 1mm,
+       y = wallThickness / 1mm,
+       z = batteryOuterHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY - batteryEndY, z = 0mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+leftBatteryRearWall = clone(leftBatteryFrontWall)
+  |> translate(y = 2 * batteryEndY, global = true)
+leftCoverLeftLip = clone(unitBox)
+  |> scale(
+       x = 4mm / 1mm,
+       y = batteryOuterLength / 1mm,
+       z = 2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -batterySideX + 0.8mm,
+       y = batteryCenterY,
+       z = batteryTopLipZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 74, metalness = 0)
+leftCoverRightLip = clone(leftCoverLeftLip)
+  |> translate(x = 2 * batterySideX - 1.6mm, global = true)
+
+leftTransitionBeam = clone(unitBox)
+  |> scale(
+       x = leftTempleTransitionWidth / 1mm,
+       y = leftTempleTransitionLength / 1mm,
+       z = leftTempleTransitionHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY + 42mm, z = -2.3mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+leftOuterBalanceSpine = clone(unitBox)
+  |> scale(
+       x = 1.8mm / 1mm,
+       y = 56mm / 1mm,
+       z = 10mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -batteryOuterWidth / 2 - 0.9mm,
+       y = batteryCenterY + 9mm,
+       z = -1.2mm,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+leftEarBeam = clone(unitBox)
+  |> scale(
+       x = leftTempleTailWidth / 1mm,
+       y = tailBeamLength / 1mm,
+       z = leftTempleTailHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = tailBeamCenterY, z = -2mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+leftTailTopRadiusRail = clone(unitCylinder)
+  |> scale(
+       x = slimTempleRailDiameter / 1mm,
+       y = slimTempleRailDiameter / 1mm,
+       z = tailBeamLength / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(y = tailBeamCenterY, z = -2mm + leftTempleTailHeight / 2, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+leftTailOuterRadiusRail = clone(leftTailTopRadiusRail)
+  |> translate(x = -leftTempleTailWidth / 2, z = -leftTempleTailHeight / 2, global = true)
+leftOuterSlimAccent = clone(unitBox)
+  |> scale(
+       x = 1.2mm / 1mm,
+       y = 48mm / 1mm,
+       z = 5.5mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -leftTempleTailWidth / 2 - 0.7mm,
+       y = tailBeamCenterY + 8mm,
+       z = -2.2mm,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+leftEarTip = clone(unitBox)
+  |> scale(
+       x = 11.5mm / 1mm,
+       y = 23mm / 1mm,
+       z = 7mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = -8deg, global = true)
+  |> translate(y = templeHalfLength - 10mm, z = -6.2mm, global = true)
+  |> appearance(color = printableBlack, roughness = 82, metalness = 0)
+leftHingeLeaf = clone(unitBox)
+  |> scale(
+       x = leftTempleHousingWidth / 1mm,
+       y = 8mm / 1mm,
+       z = hingeBlockHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = -templeHalfLength + 4mm, z = 0mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+leftHingeFairing = clone(unitBox)
+  |> scale(
+       x = 26mm / 1mm,
+       y = 15mm / 1mm,
+       z = 15mm / 1mm,
+       global = true,
+     )
+  |> translate(y = -templeHalfLength + 12mm, z = -1.2mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+
+batteryPost1Raw = clone(unitCylinder)
+  |> scale(
+       x = bossOuterDiameter / 1mm,
+       y = bossOuterDiameter / 1mm,
+       z = 7mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -batteryPostX,
+       y = batteryCenterY - batteryPostY,
+       z = batteryPostZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 70, metalness = 0)
+batterySocketCut1 = clone(unitCylinder)
+  |> scale(
+       x = m2HeatSetInsertHoleDiameter / 1mm,
+       y = m2HeatSetInsertHoleDiameter / 1mm,
+       z = m2InsertSocketHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -batteryPostX,
+       y = batteryCenterY - batteryPostY,
+       z = batteryInsertSocketZ,
+       global = true,
+     )
+batteryPost2Raw = clone(batteryPost1Raw)
+  |> translate(x = 2 * batteryPostX, global = true)
+batterySocketCut2 = clone(batterySocketCut1)
+  |> translate(x = 2 * batteryPostX, global = true)
+batteryPost3Raw = clone(batteryPost1Raw)
+  |> translate(y = 2 * batteryPostY, global = true)
+batterySocketCut3 = clone(batterySocketCut1)
+  |> translate(y = 2 * batteryPostY, global = true)
+batteryPost4Raw = clone(batteryPost2Raw)
+  |> translate(y = 2 * batteryPostY, global = true)
+batterySocketCut4 = clone(batterySocketCut2)
+  |> translate(y = 2 * batteryPostY, global = true)
+batteryPost1 = subtract([batteryPost1Raw], tools = [batterySocketCut1])
+batteryPost2 = subtract([batteryPost2Raw], tools = [batterySocketCut2])
+batteryPost3 = subtract([batteryPost3Raw], tools = [batterySocketCut3])
+batteryPost4 = subtract([batteryPost4Raw], tools = [batterySocketCut4])
+
+batteryEndFoamFront = clone(unitBox)
+  |> scale(
+       x = 18mm / 1mm,
+       y = 2mm / 1mm,
+       z = 5mm / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY - (batteryClearLength / 2) - 1mm, z = -1mm, global = true)
+  |> appearance(color = rubberDark, roughness = 88, metalness = 0)
+batteryEndFoamRear = clone(batteryEndFoamFront)
+  |> translate(y = batteryClearLength + 2mm, global = true)
+batteryAntiRattlePad = clone(unitBox)
+  |> scale(
+       x = 18mm / 1mm,
+       y = 44mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY, z = batteryClearHeight / 2 + 0.4mm, global = true)
+  |> appearance(color = rubberDark, roughness = 88, metalness = 0)
+
+leftRearComfortPad = clone(unitBox)
+  |> scale(
+       x = 1.8mm / 1mm,
+       y = 24mm / 1mm,
+       z = 9.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftTempleTailWidth / 2 + 0.9mm,
+       y = rearComfortCenterY,
+       z = rearComfortCenterZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+leftRearContourTop = clone(unitBox)
+  |> scale(
+       x = 0.9mm / 1mm,
+       y = 20mm / 1mm,
+       z = 1mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftTempleTailWidth / 2 + 1.35mm,
+       y = rearComfortCenterY,
+       z = rearComfortCenterZ + 4.2mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 84, metalness = 0)
+leftRearContourBottom = clone(leftRearContourTop)
+  |> translate(z = -8.4mm, global = true)
+
+leftPowerChannel = clone(unitBox)
+  |> scale(
+       x = 4mm / 1mm,
+       y = 103mm / 1mm,
+       z = 2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -4mm,
+       y = -2mm,
+       z = batteryClearHeight / 2 + 1mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 82, metalness = 0)
+leftDataReserveChannel = clone(unitBox)
+  |> scale(
+       x = 3mm / 1mm,
+       y = 82mm / 1mm,
+       z = 1.6mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 5mm,
+       y = 0mm,
+       z = batteryClearHeight / 2 + 1mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 82, metalness = 0)
+leftCableClip1 = clone(unitBox)
+  |> scale(
+       x = 13mm / 1mm,
+       y = 2mm / 1mm,
+       z = 2mm / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY - 28mm, z = batteryClearHeight / 2 + 3mm, global = true)
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+leftCableClip2 = clone(leftCableClip1)
+  |> translate(y = 28mm, global = true)
+leftCableClip3 = clone(leftCableClip1)
+  |> translate(y = 69mm, global = true)
+
+leftTempleBodies = flatten([
+  leftBatteryFloor,
+  leftBatteryOuterWall,
+  leftBatteryInnerWall,
+  leftBatteryFrontWall,
+  leftBatteryRearWall,
+  leftCoverLeftLip,
+  leftCoverRightLip,
+  leftTransitionBeam,
+  leftOuterBalanceSpine,
+  leftEarBeam,
+  leftTailTopRadiusRail,
+  leftTailOuterRadiusRail,
+  leftOuterSlimAccent,
+  leftEarTip,
+  leftHingeLeaf,
+  leftHingeFairing,
+  batteryPost1,
+  batteryPost2,
+  batteryPost3,
+  batteryPost4,
+  batteryEndFoamFront,
+  batteryEndFoamRear,
+  batteryAntiRattlePad,
+  leftRearComfortPad,
+  leftRearContourTop,
+  leftRearContourBottom,
+  leftPowerChannel,
+  leftDataReserveChannel,
+  leftCableClip1,
+  leftCableClip2,
+  leftCableClip3
+])
+
+export leftTempleExport = leftTempleBodies

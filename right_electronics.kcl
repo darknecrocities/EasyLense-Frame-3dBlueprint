@@ -1,0 +1,147 @@
+// Right temple electronics
+// ESP32-CAM envelope, USB-C breakout, buttons, and routed power/data wires.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+
+espClearanceEnvelope = clone(unitBox)
+  |> scale(
+       x = espClearWidth / 1mm,
+       y = espClearLength / 1mm,
+       z = espClearHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY, z = 0mm, global = true)
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 18,
+       metalness = 0,
+       opacity = 23,
+     )
+esp32CamPcb = clone(unitBox)
+  |> scale(
+       x = espBoardWidth / 1mm,
+       y = espBoardLength / 1mm,
+       z = 1.6mm / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY, z = -5.9mm, global = true)
+  |> appearance(color = pcbGreen, roughness = 56, metalness = 0)
+esp32ModuleCan = clone(unitBox)
+  |> scale(
+       x = 16mm / 1mm,
+       y = 18mm / 1mm,
+       z = 2.6mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -3mm,
+       y = espCenterY + 4mm,
+       z = -3.8mm,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 36, metalness = 70)
+esp32AntennaKeepout = clone(unitBox)
+  |> scale(
+       x = 20mm / 1mm,
+       y = 7mm / 1mm,
+       z = 0.5mm / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY - (espBoardLength / 2) + 4mm, z = -4.7mm, global = true)
+  |> appearance(color = copperGold, roughness = 42, metalness = 30)
+esp32PinHeaderLeft = clone(unitBox)
+  |> scale(
+       x = 2.4mm / 1mm,
+       y = 36mm / 1mm,
+       z = 3mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -espBoardWidth / 2 + 2mm,
+       y = espCenterY,
+       z = -2.8mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 66, metalness = 0)
+esp32PinHeaderRight = clone(esp32PinHeaderLeft)
+  |> translate(x = espBoardWidth - 4mm, global = true)
+
+usbBreakoutEnvelope = clone(unitBox)
+  |> scale(
+       x = usbBoardWidth / 1mm,
+       y = usbBoardLength / 1mm,
+       z = usbBoardHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = usbCenterY, z = -8.1mm, global = true)
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 18,
+       metalness = 0,
+       opacity = 24,
+     )
+usbBreakoutPcb = clone(unitBox)
+  |> scale(
+       x = usbBoardWidth / 1mm,
+       y = usbBoardLength / 1mm,
+       z = 1.6mm / 1mm,
+       global = true,
+     )
+  |> translate(y = usbCenterY, z = -9.2mm, global = true)
+  |> appearance(color = pcbGreen, roughness = 56, metalness = 0)
+usbCConnector = clone(unitBox)
+  |> scale(
+       x = usbPortOpeningWidth / 1mm,
+       y = 7mm / 1mm,
+       z = usbPortOpeningHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = usbCenterY - (usbBoardLength / 2) + 4mm, z = -11.5mm, global = true)
+  |> appearance(color = hardwareSteel, roughness = 30, metalness = 85)
+
+powerWireRight = clone(unitBox)
+  |> scale(
+       x = 1.4mm / 1mm,
+       y = 87mm / 1mm,
+       z = 1.4mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 5mm,
+       y = 4mm,
+       z = 9.7mm,
+       global = true,
+     )
+  |> appearance(color = ledRed, roughness = 50, metalness = 0)
+dataWireRight = clone(unitBox)
+  |> scale(
+       x = 1.2mm / 1mm,
+       y = 62mm / 1mm,
+       z = 1.2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -7mm,
+       y = -39mm,
+       z = 9.5mm,
+       global = true,
+     )
+  |> appearance(color = "#ffd247", roughness = 50, metalness = 0)
+
+rightElectronicsBodies = flatten([
+  espClearanceEnvelope,
+  esp32CamPcb,
+  esp32ModuleCan,
+  esp32AntennaKeepout,
+  esp32PinHeaderLeft,
+  esp32PinHeaderRight,
+  usbBreakoutEnvelope,
+  usbBreakoutPcb,
+  usbCConnector,
+  powerWireRight,
+  dataWireRight
+])
+
+export rightElectronicsExport = rightElectronicsBodies

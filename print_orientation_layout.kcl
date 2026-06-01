@@ -1,0 +1,147 @@
+// FDM print orientation layout
+// 220 mm bed arrangement for front frame, temples, covers, and USB service plate.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import frontFramePrintedExport as frontFrame from "front_frame.kcl"
+import rightTempleExport as rightTemple from "right_temple.kcl"
+import leftTempleExport as leftTemple from "left_temple.kcl"
+import rightControllerCoverPartExport as rightControllerCoverPart from "right_covers.kcl"
+import rightUsbServicePlateExport as rightUsbServicePlate from "right_covers.kcl"
+import leftBatteryCoverPartExport as leftBatteryCoverPart from "left_covers.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+
+bedSize = 220mm
+bedHalf = bedSize / 2
+bedRailInset = 0.6mm
+bedZ = -0.6mm
+
+printerBed = clone(unitBox)
+  |> scale(
+       x = bedSize / 1mm,
+       y = bedSize / 1mm,
+       z = 1mm / 1mm,
+       global = true,
+     )
+  |> translate(z = bedZ, global = true)
+  |> appearance(
+       color = "#222831",
+       roughness = 55,
+       metalness = 0,
+       opacity = 20,
+     )
+bedFrontRail = clone(unitBox)
+  |> scale(
+       x = bedSize / 1mm,
+       y = 1.2mm / 1mm,
+       z = 1.2mm / 1mm,
+       global = true,
+     )
+  |> translate(y = -bedHalf + bedRailInset, z = 0.4mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+bedRearRail = clone(bedFrontRail)
+  |> translate(y = bedSize - (2 * bedRailInset), global = true)
+bedLeftRail = clone(unitBox)
+  |> scale(
+       x = 1.2mm / 1mm,
+       y = bedSize / 1mm,
+       z = 1.2mm / 1mm,
+       global = true,
+     )
+  |> translate(x = -bedHalf + bedRailInset, z = 0.4mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+bedRightRail = clone(bedLeftRail)
+  |> translate(x = bedSize - (2 * bedRailInset), global = true)
+
+xPrintArrow = clone(unitBox)
+  |> scale(
+       x = 48mm / 1mm,
+       y = 1.2mm / 1mm,
+       z = 1.2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -72mm,
+       y = -101mm,
+       z = 2mm,
+       global = true,
+     )
+  |> appearance(color = ledRed, roughness = 45, metalness = 0)
+yPrintArrow = clone(unitBox)
+  |> scale(
+       x = 1.2mm / 1mm,
+       y = 48mm / 1mm,
+       z = 1.2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -95mm,
+       y = -78mm,
+       z = 2mm,
+       global = true,
+     )
+  |> appearance(color = ledGreen, roughness = 45, metalness = 0)
+
+frontFramePrint = frontFrame
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = 0mm,
+       y = -78mm,
+       z = 4.5mm,
+       global = true,
+     )
+leftTemplePrint = leftTemple
+  |> translate(
+       x = -58mm,
+       y = 38mm,
+       z = 12mm,
+       global = true,
+     )
+rightTemplePrint = rightTemple
+  |> translate(
+       x = 58mm,
+       y = 38mm,
+       z = 12mm,
+       global = true,
+     )
+leftBatteryCoverPrint = leftBatteryCoverPart
+  |> translate(
+       x = -89mm,
+       y = 83mm,
+       z = -4mm,
+       global = true,
+     )
+rightControllerCoverPrint = rightControllerCoverPart
+  |> translate(
+       x = 92mm,
+       y = 96mm,
+       z = -7.2mm,
+       global = true,
+     )
+rightUsbPlatePrint = rightUsbServicePlate
+  |> translate(
+       x = 93mm,
+       y = 15mm,
+       z = 11.2mm,
+       global = true,
+     )
+
+printOrientationLayout = flatten([
+  printerBed,
+  bedFrontRail,
+  bedRearRail,
+  bedLeftRail,
+  bedRightRail,
+  xPrintArrow,
+  yPrintArrow,
+  frontFramePrint,
+  leftTemplePrint,
+  rightTemplePrint,
+  leftBatteryCoverPrint,
+  rightControllerCoverPrint,
+  rightUsbPlatePrint
+])
+
+export printOrientationLayoutExport = printOrientationLayout
+
+printOrientationLayout

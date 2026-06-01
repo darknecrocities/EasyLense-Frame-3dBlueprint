@@ -1,0 +1,398 @@
+// Right temple printed body
+// ESP32-CAM housing, USB-C opening, buttons, cable routing, and slim non-audio rear arm.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+espFloorZ = -espClearHeight / 2 - (wallThickness / 2)
+espTopLipZ = espClearHeight / 2 + wallThickness / 2
+espSideX = espClearWidth / 2 + wallThickness / 2
+espEndY = espClearLength / 2 + wallThickness / 2
+postBaseZ = -espClearHeight / 2 + 3.9mm
+postX = espClearWidth / 2 - 4mm
+postY = espClearLength / 2 - 5mm
+m2InsertSocketHeight = m2HeatSetInsertLength + csgOverlap
+espPostTopZ = postBaseZ + 4mm
+espInsertSocketZ = espPostTopZ - (m2HeatSetInsertLength / 2) + csgOverlap / 2
+usbPostCenterZ = espFloorZ + 4mm
+usbPostTopZ = usbPostCenterZ + 2.5mm
+usbPilotSocketHeight = usbBoardPilotDepth + csgOverlap
+usbPilotSocketZ = usbPostTopZ - (usbBoardPilotDepth / 2) + csgOverlap / 2
+tailBeamCenterY = 36mm
+tailBeamLength = 72mm
+rearComfortCenterY = templeHalfLength - 25mm
+rearComfortCenterZ = -2mm
+
+rightEspFloorRaw = clone(unitBox)
+  |> scale(
+       x = espOuterWidth / 1mm,
+       y = espOuterLength / 1mm,
+       z = wallThickness / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY, z = espFloorZ, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+usbPortFloorCut = clone(unitBox)
+  |> scale(
+       x = usbPortOpeningWidth / 1mm,
+       y = 7mm / 1mm,
+       z = (wallThickness + 2 * csgOverlap) / 1mm,
+       global = true,
+     )
+  |> translate(y = usbCenterY, z = espFloorZ, global = true)
+rightEspFloor = subtract([rightEspFloorRaw], tools = [usbPortFloorCut])
+
+rightEspOuterWall = clone(unitBox)
+  |> scale(
+       x = wallThickness / 1mm,
+       y = espOuterLength / 1mm,
+       z = espOuterHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = espSideX,
+       y = espCenterY,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+rightEspInnerWall = clone(rightEspOuterWall)
+  |> translate(x = -2 * espSideX, global = true)
+rightEspFrontWall = clone(unitBox)
+  |> scale(
+       x = espOuterWidth / 1mm,
+       y = wallThickness / 1mm,
+       z = espOuterHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY - espEndY, z = 0mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+rightEspRearWall = clone(rightEspFrontWall)
+  |> translate(y = 2 * espEndY, global = true)
+rightCoverLeftLip = clone(unitBox)
+  |> scale(
+       x = 5mm / 1mm,
+       y = espOuterLength / 1mm,
+       z = 2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -espSideX + 1mm,
+       y = espCenterY,
+       z = espTopLipZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 74, metalness = 0)
+rightCoverRightLip = clone(rightCoverLeftLip)
+  |> translate(x = 2 * espSideX - 2mm, global = true)
+
+rightTransitionBeam = clone(unitBox)
+  |> scale(
+       x = rightTempleTransitionWidth / 1mm,
+       y = rightTempleTransitionLength / 1mm,
+       z = rightTempleTransitionHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY + 34mm, z = -2mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+rightEarBeam = clone(unitBox)
+  |> scale(
+       x = rightTempleTailWidth / 1mm,
+       y = tailBeamLength / 1mm,
+       z = rightTempleTailHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = tailBeamCenterY, z = -2mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+rightTailTopRadiusRail = clone(unitCylinder)
+  |> scale(
+       x = slimTempleRailDiameter / 1mm,
+       y = slimTempleRailDiameter / 1mm,
+       z = tailBeamLength / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(y = tailBeamCenterY, z = -2mm + rightTempleTailHeight / 2, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+rightTailOuterRadiusRail = clone(rightTailTopRadiusRail)
+  |> translate(x = rightTempleTailWidth / 2, z = -rightTempleTailHeight / 2, global = true)
+rightOuterSlimAccent = clone(unitBox)
+  |> scale(
+       x = 1.2mm / 1mm,
+       y = 48mm / 1mm,
+       z = 5.5mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = rightTempleTailWidth / 2 + 0.7mm,
+       y = tailBeamCenterY + 8mm,
+       z = -2.2mm,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+rightEarTip = clone(unitBox)
+  |> scale(
+       x = 11.5mm / 1mm,
+       y = 23mm / 1mm,
+       z = 7mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = -8deg, global = true)
+  |> translate(y = templeHalfLength - 10mm, z = -6.2mm, global = true)
+  |> appearance(color = printableBlack, roughness = 82, metalness = 0)
+rightHingeLeaf = clone(unitBox)
+  |> scale(
+       x = rightTempleHousingWidth / 1mm,
+       y = 8mm / 1mm,
+       z = hingeBlockHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = -templeHalfLength + 4mm, z = 0mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+rightHingeFairing = clone(unitBox)
+  |> scale(
+       x = 30mm / 1mm,
+       y = 15mm / 1mm,
+       z = 17mm / 1mm,
+       global = true,
+     )
+  |> translate(y = -templeHalfLength + 12mm, z = -1mm, global = true)
+  |> appearance(color = printableBlack, roughness = 78, metalness = 0)
+
+espPost1Raw = clone(unitCylinder)
+  |> scale(
+       x = bossOuterDiameter / 1mm,
+       y = bossOuterDiameter / 1mm,
+       z = 8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -postX,
+       y = espCenterY - postY,
+       z = postBaseZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 70, metalness = 0)
+espSocketCut1 = clone(unitCylinder)
+  |> scale(
+       x = m2HeatSetInsertHoleDiameter / 1mm,
+       y = m2HeatSetInsertHoleDiameter / 1mm,
+       z = m2InsertSocketHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -postX,
+       y = espCenterY - postY,
+       z = espInsertSocketZ,
+       global = true,
+     )
+espPost2Raw = clone(espPost1Raw)
+  |> translate(x = 2 * postX, global = true)
+espSocketCut2 = clone(espSocketCut1)
+  |> translate(x = 2 * postX, global = true)
+espPost3Raw = clone(espPost1Raw)
+  |> translate(y = 2 * postY, global = true)
+espSocketCut3 = clone(espSocketCut1)
+  |> translate(y = 2 * postY, global = true)
+espPost4Raw = clone(espPost2Raw)
+  |> translate(y = 2 * postY, global = true)
+espSocketCut4 = clone(espSocketCut2)
+  |> translate(y = 2 * postY, global = true)
+espPost1 = subtract([espPost1Raw], tools = [espSocketCut1])
+espPost2 = subtract([espPost2Raw], tools = [espSocketCut2])
+espPost3 = subtract([espPost3Raw], tools = [espSocketCut3])
+espPost4 = subtract([espPost4Raw], tools = [espSocketCut4])
+
+usbBoardPost1Raw = clone(unitCylinder)
+  |> scale(
+       x = 4.8mm / 1mm,
+       y = 4.8mm / 1mm,
+       z = 5mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -7mm,
+       y = usbCenterY + 6mm,
+       z = usbPostCenterZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 70, metalness = 0)
+usbBoardPilotCut1 = clone(unitCylinder)
+  |> scale(
+       x = usbBoardPilotDiameter / 1mm,
+       y = usbBoardPilotDiameter / 1mm,
+       z = usbPilotSocketHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -7mm,
+       y = usbCenterY + 6mm,
+       z = usbPilotSocketZ,
+       global = true,
+     )
+usbBoardPost2Raw = clone(usbBoardPost1Raw)
+  |> translate(x = 14mm, global = true)
+usbBoardPilotCut2 = clone(usbBoardPilotCut1)
+  |> translate(x = 14mm, global = true)
+usbBoardPost1 = subtract([usbBoardPost1Raw], tools = [usbBoardPilotCut1])
+usbBoardPost2 = subtract([usbBoardPost2Raw], tools = [usbBoardPilotCut2])
+
+usbPortVisual = clone(unitBox)
+  |> scale(
+       x = usbPortOpeningWidth / 1mm,
+       y = 6mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(y = usbCenterY, z = espFloorZ - (wallThickness / 2) - 0.5mm, global = true)
+  |> appearance(color = matteBlack, roughness = 84, metalness = 0)
+
+rightRearComfortPad = clone(unitBox)
+  |> scale(
+       x = 1.8mm / 1mm,
+       y = 24mm / 1mm,
+       z = 9.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -rightTempleTailWidth / 2 - 0.9mm,
+       y = rearComfortCenterY,
+       z = rearComfortCenterZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+rightRearContourTop = clone(unitBox)
+  |> scale(
+       x = 0.9mm / 1mm,
+       y = 20mm / 1mm,
+       z = 1mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -rightTempleTailWidth / 2 - 1.35mm,
+       y = rearComfortCenterY,
+       z = rearComfortCenterZ + 4.2mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 84, metalness = 0)
+rightRearContourBottom = clone(rightRearContourTop)
+  |> translate(z = -8.4mm, global = true)
+
+rightPowerButton = clone(unitBox)
+  |> scale(
+       x = 2.2mm / 1mm,
+       y = buttonWidth / 1mm,
+       z = buttonHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = espOuterWidth / 2 + 1.4mm,
+       y = espCenterY - 8mm,
+       z = 2.5mm,
+       global = true,
+     )
+  |> appearance(color = rubberDark, roughness = 86, metalness = 0)
+rightActionButton = clone(rightPowerButton)
+  |> translate(y = 13mm, global = true)
+rightButtonGuardFront = clone(unitBox)
+  |> scale(
+       x = 2.5mm / 1mm,
+       y = 2mm / 1mm,
+       z = buttonTravelGuardHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = espOuterWidth / 2 + 1.2mm,
+       y = espCenterY - 14mm,
+       z = 2.5mm,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 74, metalness = 0)
+rightButtonGuardMiddle = clone(rightButtonGuardFront)
+  |> translate(y = 13mm, global = true)
+rightButtonGuardRear = clone(rightButtonGuardFront)
+  |> translate(y = 26mm, global = true)
+
+rightDataChannel = clone(unitBox)
+  |> scale(
+       x = 4mm / 1mm,
+       y = 67mm / 1mm,
+       z = 2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -7mm,
+       y = -37mm,
+       z = espClearHeight / 2 + 1mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 82, metalness = 0)
+rightPowerChannel = clone(unitBox)
+  |> scale(
+       x = 3mm / 1mm,
+       y = 93mm / 1mm,
+       z = 2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 5mm,
+       y = 4mm,
+       z = espClearHeight / 2 + 1mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 82, metalness = 0)
+rightCableClip1 = clone(unitBox)
+  |> scale(
+       x = 14mm / 1mm,
+       y = 2mm / 1mm,
+       z = 2mm / 1mm,
+       global = true,
+     )
+  |> translate(y = espCenterY - 21mm, z = espClearHeight / 2 + 3.2mm, global = true)
+  |> appearance(color = graphite, roughness = 76, metalness = 0)
+rightCableClip2 = clone(rightCableClip1)
+  |> translate(y = 20mm, global = true)
+rightCableClip3 = clone(rightCableClip1)
+  |> translate(y = 58mm, global = true)
+
+rightTempleBodies = flatten([
+  rightEspFloor,
+  rightEspOuterWall,
+  rightEspInnerWall,
+  rightEspFrontWall,
+  rightEspRearWall,
+  rightCoverLeftLip,
+  rightCoverRightLip,
+  rightTransitionBeam,
+  rightEarBeam,
+  rightTailTopRadiusRail,
+  rightTailOuterRadiusRail,
+  rightOuterSlimAccent,
+  rightEarTip,
+  rightHingeLeaf,
+  rightHingeFairing,
+  espPost1,
+  espPost2,
+  espPost3,
+  espPost4,
+  usbBoardPost1,
+  usbBoardPost2,
+  usbPortVisual,
+  rightRearComfortPad,
+  rightRearContourTop,
+  rightRearContourBottom,
+  rightPowerButton,
+  rightActionButton,
+  rightButtonGuardFront,
+  rightButtonGuardMiddle,
+  rightButtonGuardRear,
+  rightDataChannel,
+  rightPowerChannel,
+  rightCableClip1,
+  rightCableClip2,
+  rightCableClip3
+])
+
+export rightTempleExport = rightTempleBodies

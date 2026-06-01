@@ -1,0 +1,331 @@
+// Dimension blueprint geometry
+// Scaled orthographic dimension bars, electronics clearances, nose saddle clearance, and slim tail section.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+
+frontWidthDim = clone(unitBox)
+  |> scale(
+       x = frameWidth / 1mm,
+       y = 0.9mm / 1mm,
+       z = 0.9mm / 1mm,
+       global = true,
+     )
+  |> translate(z = 62mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+frontWidthTickL = clone(unitBox)
+  |> scale(
+       x = 0.9mm / 1mm,
+       y = 0.9mm / 1mm,
+       z = 9mm / 1mm,
+       global = true,
+     )
+  |> translate(x = -frameWidth / 2, z = 62mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+frontWidthTickR = clone(frontWidthTickL)
+  |> translate(x = frameWidth, global = true)
+frontHeightDim = clone(unitBox)
+  |> scale(
+       x = 0.9mm / 1mm,
+       y = 0.9mm / 1mm,
+       z = frameHeight / 1mm,
+       global = true,
+     )
+  |> translate(x = -87mm, z = 0mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+frontHeightTickT = clone(unitBox)
+  |> scale(
+       x = 9mm / 1mm,
+       y = 0.9mm / 1mm,
+       z = 0.9mm / 1mm,
+       global = true,
+     )
+  |> translate(x = -87mm, z = frameHeight / 2, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+frontHeightTickB = clone(frontHeightTickT)
+  |> translate(z = -frameHeight, global = true)
+
+lensWidthDim = clone(unitBox)
+  |> scale(
+       x = lensWidth / 1mm,
+       y = 0.8mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(x = -lensCenterX, z = -52mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+bridgeWidthDim = clone(unitBox)
+  |> scale(
+       x = bridgeWidth / 1mm,
+       y = 0.8mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(z = -58mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+rightLensWidthDim = clone(lensWidthDim)
+  |> translate(x = 2 * lensCenterX, global = true)
+
+noseClearanceBlueprint = clone(unitBox)
+  |> scale(
+       x = noseSaddleClearanceWidth / 1mm,
+       y = 1mm / 1mm,
+       z = noseSaddleClearanceHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = -8mm, z = noseSaddleCenterZ, global = true)
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 16,
+       metalness = 0,
+       opacity = 28,
+     )
+noseClearanceWidthDim = clone(unitBox)
+  |> scale(
+       x = noseSaddleClearanceWidth / 1mm,
+       y = 0.8mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(y = -9mm, z = noseSaddleCenterZ - (noseSaddleClearanceHeight / 2) - 5mm, global = true)
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+noseClearanceHeightDim = clone(unitBox)
+  |> scale(
+       x = 0.8mm / 1mm,
+       y = 0.8mm / 1mm,
+       z = noseSaddleClearanceHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = noseSaddleClearanceWidth / 2 + 5mm,
+       y = -9mm,
+       z = noseSaddleCenterZ,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+
+templeLengthDim = clone(unitBox)
+  |> scale(
+       x = 0.9mm / 1mm,
+       y = templeLength / 1mm,
+       z = 0.9mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 105mm,
+       y = 75mm,
+       z = -44mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+templeLengthTickFront = clone(unitBox)
+  |> scale(
+       x = 9mm / 1mm,
+       y = 0.9mm / 1mm,
+       z = 0.9mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 105mm,
+       y = 2.5mm,
+       z = -44mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+templeLengthTickRear = clone(templeLengthTickFront)
+  |> translate(y = templeLength, global = true)
+
+espClearanceBlueprint = clone(unitBox)
+  |> scale(
+       x = espClearWidth / 1mm,
+       y = espClearLength / 1mm,
+       z = espClearHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 154mm,
+       y = 20mm,
+       z = 10mm,
+       global = true,
+     )
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 16,
+       metalness = 0,
+       opacity = 30,
+     )
+espDimLength = clone(unitBox)
+  |> scale(
+       x = 0.8mm / 1mm,
+       y = espClearLength / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 174mm,
+       y = 20mm,
+       z = 23mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+espDimWidth = clone(unitBox)
+  |> scale(
+       x = espClearWidth / 1mm,
+       y = 0.8mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 154mm,
+       y = -5mm,
+       z = 23mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+
+batteryClearanceBlueprint = clone(unitBox)
+  |> scale(
+       x = batteryClearWidth / 1mm,
+       y = batteryClearLength / 1mm,
+       z = batteryClearHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 154mm,
+       y = 95mm,
+       z = 5mm,
+       global = true,
+     )
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 16,
+       metalness = 0,
+       opacity = 30,
+     )
+batteryDimLength = clone(unitBox)
+  |> scale(
+       x = 0.8mm / 1mm,
+       y = batteryClearLength / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 170mm,
+       y = 95mm,
+       z = 16mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+batteryDimWidth = clone(unitBox)
+  |> scale(
+       x = batteryClearWidth / 1mm,
+       y = 0.8mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 154mm,
+       y = 60mm,
+       z = 16mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+
+usbBreakoutBlueprint = clone(unitBox)
+  |> scale(
+       x = usbBoardWidth / 1mm,
+       y = usbBoardLength / 1mm,
+       z = usbBoardHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 208mm,
+       y = 95mm,
+       z = 6mm,
+       global = true,
+     )
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 16,
+       metalness = 0,
+       opacity = 30,
+     )
+
+slimTailBlueprint = clone(unitBox)
+  |> scale(
+       x = rightTempleTailWidth / 1mm,
+       y = 36mm / 1mm,
+       z = rightTempleTailHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 210mm,
+       y = 32mm,
+       z = 43mm,
+       global = true,
+     )
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 18,
+       metalness = 0,
+       opacity = 28,
+     )
+slimTailWidthDim = clone(unitBox)
+  |> scale(
+       x = rightTempleTailWidth / 1mm,
+       y = 0.8mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 210mm,
+       y = 9mm,
+       z = 51mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+slimTailHeightDim = clone(unitBox)
+  |> scale(
+       x = 0.8mm / 1mm,
+       y = 0.8mm / 1mm,
+       z = rightTempleTailHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 222mm,
+       y = 32mm,
+       z = 43mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+
+blueprintBodies = flatten([
+  frontWidthDim,
+  frontWidthTickL,
+  frontWidthTickR,
+  frontHeightDim,
+  frontHeightTickT,
+  frontHeightTickB,
+  lensWidthDim,
+  rightLensWidthDim,
+  bridgeWidthDim,
+  noseClearanceBlueprint,
+  noseClearanceWidthDim,
+  noseClearanceHeightDim,
+  templeLengthDim,
+  templeLengthTickFront,
+  templeLengthTickRear,
+  espClearanceBlueprint,
+  espDimLength,
+  espDimWidth,
+  batteryClearanceBlueprint,
+  batteryDimLength,
+  batteryDimWidth,
+  usbBreakoutBlueprint,
+  slimTailBlueprint,
+  slimTailWidthDim,
+  slimTailHeightDim
+])
+
+export blueprintExport = blueprintBodies

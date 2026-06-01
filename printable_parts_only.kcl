@@ -1,0 +1,33 @@
+// Printable parts only
+// Frame, temples, and removable covers without electronics, hinge hardware, or blueprint views.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import frontFramePrintedExport as frontFrame from "front_frame.kcl"
+import rightTempleExport as rightTemple from "right_temple.kcl"
+import leftTempleExport as leftTemple from "left_temple.kcl"
+import rightCoversExport as rightCovers from "right_covers.kcl"
+import leftCoversExport as leftCovers from "left_covers.kcl"
+
+rightTempleX = hingeCenterX + 7mm
+leftTempleX = -hingeCenterX - 7mm
+
+frontFramePart = frontFrame
+rightTemplePart = rightTemple
+  |> translate(x = rightTempleX, y = templeAssemblyCenterY, global = true)
+leftTemplePart = leftTemple
+  |> translate(x = leftTempleX, y = templeAssemblyCenterY, global = true)
+rightCoverParts = rightCovers
+  |> translate(x = rightTempleX, y = templeAssemblyCenterY, global = true)
+leftCoverParts = leftCovers
+  |> translate(x = leftTempleX, y = templeAssemblyCenterY, global = true)
+
+printablePartsOnly = flatten([
+  frontFramePart,
+  rightTemplePart,
+  leftTemplePart,
+  rightCoverParts,
+  leftCoverParts
+])
+
+printablePartsOnly

@@ -1,0 +1,21 @@
+// Unit cylinder primitive
+// Origin-centered one-millimeter diameter cylinder for scalable round features.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+unitCylinderSketch = sketch(on = XY) {
+  cylinderCenter = point(at = [var 0mm, var 0mm])
+  radiusGuide = line(start = [var 0mm, var 0mm], end = [var 0.5mm, var 0mm], construction = true)
+  cylinderEdge = circle(start = [var 0.5mm, var 0mm], center = [var 0mm, var 0mm])
+  coincident([cylinderCenter, ORIGIN])
+  coincident([radiusGuide.start, cylinderCenter])
+  coincident([radiusGuide.end, cylinderEdge.start])
+  coincident([cylinderEdge.center, cylinderCenter])
+  horizontal(radiusGuide)
+  horizontalDistance([radiusGuide.start, radiusGuide.end]) == 0.5mm
+}
+
+unitCylinderRegion = region(point = [0mm, 0mm], sketch = unitCylinderSketch)
+unitCylinderBody = extrude(unitCylinderRegion, length = 1mm, symmetric = true)
+unitCylinderSketchHidden = hide(unitCylinderSketch)
+
+export unitCylinderExport = unitCylinderBody

@@ -1,0 +1,280 @@
+// Finished showcase shell
+// Smooth cosmetic overlays for the closed consumer-product presentation view.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+rightTempleX = hingeCenterX + 7mm
+leftTempleX = -hingeCenterX - 7mm
+showcaseLensTopZ = lensHeight / 2 + browBeam / 2
+rightControllerCenterY = templeAssemblyCenterY + espCenterY
+leftBatteryCenterY = templeAssemblyCenterY + batteryCenterY
+rightTailCenterY = templeAssemblyCenterY + 36mm
+leftTailCenterY = templeAssemblyCenterY + 37mm
+rightOuterSideX = rightTempleX + espOuterWidth / 2
+leftOuterSideX = leftTempleX - (batteryOuterWidth / 2)
+rightTailOuterX = rightTempleX + rightTempleTailWidth / 2
+leftTailOuterX = leftTempleX - (leftTempleTailWidth / 2)
+rearTipCenterY = templeAssemblyCenterY + templeHalfLength - 10mm
+showcaseNasalReturnX = bridgeWidth / 2 + 2.5mm
+
+topBrowSoftShell = clone(unitBox)
+  |> scale(
+       x = (frameWidth - 16mm) / 1mm,
+       y = consumerShellThickness / 1mm,
+       z = 3.8mm / 1mm,
+       global = true,
+     )
+  |> translate(y = -frontFrameThickness / 2 - 0.65mm, z = showcaseLensTopZ + 1.2mm, global = true)
+  |> appearance(color = matteBlack, roughness = 68, metalness = 0)
+frontBrowCrownRail = clone(unitCylinder)
+  |> scale(
+       x = 3mm / 1mm,
+       y = 3mm / 1mm,
+       z = (frameWidth - 22mm) / 1mm,
+       global = true,
+     )
+  |> rotate(axis = Y, angle = 90deg, global = true)
+  |> translate(y = -frontFrameThickness / 2 - 1.25mm, z = showcaseLensTopZ + 3.4mm, global = true)
+  |> appearance(color = matteBlack, roughness = 70, metalness = 0)
+noseSaddleSoftCrown = clone(unitCylinder)
+  |> scale(
+       x = (noseBridgeArchDiameter + 0.8mm) / 1mm,
+       y = (noseBridgeArchDiameter + 0.8mm) / 1mm,
+       z = (bridgeWidth + 7mm) / 1mm,
+       global = true,
+     )
+  |> rotate(axis = Y, angle = 90deg, global = true)
+  |> translate(y = -frontFrameThickness / 2 - 0.9mm, z = 1.5mm, global = true)
+  |> appearance(color = matteBlack, roughness = 74, metalness = 0)
+leftNoseSaddleBlend = clone(unitBox)
+  |> scale(
+       x = 3.8mm / 1mm,
+       y = consumerShellThickness / 1mm,
+       z = 16mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -showcaseNasalReturnX,
+       y = -frontFrameThickness / 2 - 0.8mm,
+       z = -14mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 74, metalness = 0)
+rightNoseSaddleBlend = clone(leftNoseSaddleBlend)
+  |> translate(x = 2 * showcaseNasalReturnX, global = true)
+cameraPodFairingShell = clone(unitBox)
+  |> scale(
+       x = (cameraPodWidth + 3mm) / 1mm,
+       y = consumerShellThickness / 1mm,
+       z = (cameraPodHeight + 3mm) / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraCenterX,
+       y = -frontFrameThickness / 2 - 2.6mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 70, metalness = 0)
+cameraFairingSideRadius = clone(unitCylinder)
+  |> scale(
+       x = 2.2mm / 1mm,
+       y = 2.2mm / 1mm,
+       z = (cameraPodHeight + 2mm) / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraCenterX + cameraPodWidth / 2 + 1mm,
+       y = -frontFrameThickness / 2 - 2.6mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 70, metalness = 0)
+
+rightControllerOuterSkin = clone(unitBox)
+  |> scale(
+       x = consumerShellThickness / 1mm,
+       y = 64mm / 1mm,
+       z = 19mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = rightOuterSideX + 0.75mm,
+       y = rightControllerCenterY + 6mm,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 72, metalness = 0)
+rightButtonRecessPanel = clone(unitBox)
+  |> scale(
+       x = 0.9mm / 1mm,
+       y = 29mm / 1mm,
+       z = 8.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = rightOuterSideX + 1.8mm,
+       y = rightControllerCenterY - 1.5mm,
+       z = 2.5mm,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 78, metalness = 0)
+rightControllerCrown = clone(unitCylinder)
+  |> scale(
+       x = 3mm / 1mm,
+       y = 3mm / 1mm,
+       z = 54mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = rightTempleX,
+       y = rightControllerCenterY + 7mm,
+       z = espOuterHeight / 2 + 0.65mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 72, metalness = 0)
+rightTailOuterSkin = clone(unitBox)
+  |> scale(
+       x = consumerShellThickness / 1mm,
+       y = 69mm / 1mm,
+       z = 8.7mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = rightTailOuterX + 0.65mm,
+       y = rightTailCenterY + 4mm,
+       z = -2.1mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 74, metalness = 0)
+rightTailCrown = clone(unitCylinder)
+  |> scale(
+       x = 3mm / 1mm,
+       y = 3mm / 1mm,
+       z = 72mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = rightTempleX,
+       y = rightTailCenterY,
+       z = -2mm + rightTempleTailHeight / 2 + 0.4mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 74, metalness = 0)
+rightRearSoftCap = clone(unitCylinder)
+  |> scale(
+       x = 10.5mm / 1mm,
+       y = 10.5mm / 1mm,
+       z = 12mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = rightTempleX,
+       y = rearTipCenterY + 2mm,
+       z = -6.2mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 78, metalness = 0)
+
+leftBatteryOuterSkin = clone(unitBox)
+  |> scale(
+       x = consumerShellThickness / 1mm,
+       y = 78mm / 1mm,
+       z = 14mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftOuterSideX - 0.75mm,
+       y = leftBatteryCenterY + 7mm,
+       z = -0.8mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 72, metalness = 0)
+leftBatteryCrown = clone(unitCylinder)
+  |> scale(
+       x = 3mm / 1mm,
+       y = 3mm / 1mm,
+       z = 63mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = leftTempleX,
+       y = leftBatteryCenterY + 7mm,
+       z = batteryOuterHeight / 2 + 0.65mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 72, metalness = 0)
+leftTailOuterSkin = clone(unitBox)
+  |> scale(
+       x = consumerShellThickness / 1mm,
+       y = 69mm / 1mm,
+       z = 8.7mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftTailOuterX - 0.65mm,
+       y = leftTailCenterY + 4mm,
+       z = -2.1mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 74, metalness = 0)
+leftTailCrown = clone(unitCylinder)
+  |> scale(
+       x = 3mm / 1mm,
+       y = 3mm / 1mm,
+       z = 72mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = leftTempleX,
+       y = leftTailCenterY,
+       z = -2mm + leftTempleTailHeight / 2 + 0.4mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 74, metalness = 0)
+leftRearSoftCap = clone(unitCylinder)
+  |> scale(
+       x = 10.5mm / 1mm,
+       y = 10.5mm / 1mm,
+       z = 12mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = leftTempleX,
+       y = rearTipCenterY + 2mm,
+       z = -6.2mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 78, metalness = 0)
+
+showcaseShellBodies = flatten([
+  topBrowSoftShell,
+  frontBrowCrownRail,
+  noseSaddleSoftCrown,
+  leftNoseSaddleBlend,
+  rightNoseSaddleBlend,
+  cameraPodFairingShell,
+  cameraFairingSideRadius,
+  rightControllerOuterSkin,
+  rightButtonRecessPanel,
+  rightControllerCrown,
+  rightTailOuterSkin,
+  rightTailCrown,
+  rightRearSoftCap,
+  leftBatteryOuterSkin,
+  leftBatteryCrown,
+  leftTailOuterSkin,
+  leftTailCrown,
+  leftRearSoftCap
+])
+
+export showcaseShellExport = showcaseShellBodies

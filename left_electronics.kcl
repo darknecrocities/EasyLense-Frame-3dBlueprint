@@ -1,0 +1,82 @@
+// Left temple electronics
+// LiPo battery envelope, battery pack, and power wiring.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+
+batteryClearanceEnvelope = clone(unitBox)
+  |> scale(
+       x = batteryClearWidth / 1mm,
+       y = batteryClearLength / 1mm,
+       z = batteryClearHeight / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY, z = 0mm, global = true)
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 18,
+       metalness = 0,
+       opacity = 24,
+     )
+lipoBattery = clone(unitBox)
+  |> scale(
+       x = 18mm / 1mm,
+       y = 58mm / 1mm,
+       z = 7.5mm / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY, z = -0.2mm, global = true)
+  |> appearance(color = lipoSilver, roughness = 42, metalness = 12)
+lipoKaptonSleeve = clone(unitBox)
+  |> scale(
+       x = 19mm / 1mm,
+       y = 59mm / 1mm,
+       z = 0.35mm / 1mm,
+       global = true,
+     )
+  |> translate(y = batteryCenterY, z = 3.85mm, global = true)
+  |> appearance(
+       color = lipoYellow,
+       roughness = 58,
+       metalness = 0,
+       opacity = 72,
+     )
+leftPowerWire = clone(unitBox)
+  |> scale(
+       x = 1.5mm / 1mm,
+       y = 105mm / 1mm,
+       z = 1.5mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -4mm,
+       y = -1mm,
+       z = 7.2mm,
+       global = true,
+     )
+  |> appearance(color = ledRed, roughness = 50, metalness = 0)
+leftGroundWire = clone(unitBox)
+  |> scale(
+       x = 1.2mm / 1mm,
+       y = 105mm / 1mm,
+       z = 1.2mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 1mm,
+       y = -1mm,
+       z = 7mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 60, metalness = 0)
+
+leftElectronicsBodies = flatten([
+  batteryClearanceEnvelope,
+  lipoBattery,
+  lipoKaptonSleeve,
+  leftPowerWire,
+  leftGroundWire
+])
+
+export leftElectronicsExport = leftElectronicsBodies

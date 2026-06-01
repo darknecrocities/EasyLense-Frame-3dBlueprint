@@ -1,0 +1,404 @@
+// Smart glasses front frame
+// Ray-Ban-style printed front with lens rims, open nose saddle, camera pod, and comfort pads.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+leftLensX = -lensCenterX
+rightLensX = lensCenterX
+lensTopZ = lensHeight / 2 + browBeam / 2
+lensBottomZ = -lensHeight / 2 - (rimBeam / 2)
+outerSideZ = 0mm
+sideBarHeight = lensHeight + 2 * rimBeam
+outerRimX = lensCenterX + lensWidth / 2 + rimBeam / 2
+innerRimX = bridgeWidth / 2 - (rimBeam / 2)
+nasalReturnX = bridgeWidth / 2 + 2.5mm
+
+leftTopRim = clone(unitBox)
+  |> scale(
+       x = (lensWidth + 2 * rimBeam + 4mm) / 1mm,
+       y = frontFrameThickness / 1mm,
+       z = browBeam / 1mm,
+       global = true,
+     )
+  |> translate(x = leftLensX, z = lensTopZ, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+leftBottomRim = clone(unitBox)
+  |> scale(
+       x = (lensWidth + 2 * rimBeam) / 1mm,
+       y = frontFrameThickness / 1mm,
+       z = rimBeam / 1mm,
+       global = true,
+     )
+  |> translate(x = leftLensX, z = lensBottomZ, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+leftOuterRim = clone(unitBox)
+  |> scale(
+       x = rimBeam / 1mm,
+       y = frontFrameThickness / 1mm,
+       z = sideBarHeight / 1mm,
+       global = true,
+     )
+  |> translate(x = -outerRimX, z = outerSideZ, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+leftInnerRimUpper = clone(unitBox)
+  |> scale(
+       x = rimBeam / 1mm,
+       y = frontFrameThickness / 1mm,
+       z = 28mm / 1mm,
+       global = true,
+     )
+  |> translate(x = -innerRimX, z = 9.5mm, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+leftInnerNasalReturn = clone(unitBox)
+  |> scale(
+       x = 3mm / 1mm,
+       y = frontFrameThickness / 1mm,
+       z = 20mm / 1mm,
+       global = true,
+     )
+  |> translate(x = -nasalReturnX, z = -14mm, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+
+rightTopRim = clone(leftTopRim)
+  |> translate(x = 2 * lensCenterX, global = true)
+rightBottomRim = clone(leftBottomRim)
+  |> translate(x = 2 * lensCenterX, global = true)
+rightOuterRim = clone(leftOuterRim)
+  |> translate(x = 2 * outerRimX, global = true)
+rightInnerRimUpper = clone(leftInnerRimUpper)
+  |> translate(x = 2 * innerRimX, global = true)
+rightInnerNasalReturn = clone(leftInnerNasalReturn)
+  |> translate(x = 2 * nasalReturnX, global = true)
+
+leftLowerCorner = clone(unitCylinder)
+  |> scale(
+       x = 9mm / 1mm,
+       y = 9mm / 1mm,
+       z = frontFrameThickness / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(x = leftLensX - (lensWidth / 2), z = -lensHeight / 2, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+rightLowerCorner = clone(leftLowerCorner)
+  |> translate(x = 2 * lensCenterX, global = true)
+leftUpperCorner = clone(leftLowerCorner)
+  |> translate(z = lensHeight, global = true)
+rightUpperCorner = clone(rightLowerCorner)
+  |> translate(z = lensHeight, global = true)
+
+bridgeTop = clone(unitBox)
+  |> scale(
+       x = bridgeWidth / 1mm,
+       y = frontFrameThickness / 1mm,
+       z = browBeam / 1mm,
+       global = true,
+     )
+  |> translate(z = lensTopZ - 1mm, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+bridgeCenterCrownWeb = clone(unitBox)
+  |> scale(
+       x = 6mm / 1mm,
+       y = (frontFrameThickness + 1mm) / 1mm,
+       z = 12mm / 1mm,
+       global = true,
+     )
+  |> translate(z = 8mm, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+bridgeUpperArch = clone(unitCylinder)
+  |> scale(
+       x = noseBridgeArchDiameter / 1mm,
+       y = noseBridgeArchDiameter / 1mm,
+       z = (bridgeWidth + 7mm) / 1mm,
+       global = true,
+     )
+  |> rotate(axis = Y, angle = 90deg, global = true)
+  |> translate(z = 1.2mm, global = true)
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+
+leftNosePadStem = clone(unitBox)
+  |> scale(
+       x = nosePadStemWidth / 1mm,
+       y = 4.2mm / 1mm,
+       z = 11mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = Y, angle = -12deg, global = true)
+  |> translate(
+       x = -8.8mm,
+       y = 3.2mm,
+       z = -11.2mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 80, metalness = 0)
+rightNosePadStem = clone(unitBox)
+  |> scale(
+       x = nosePadStemWidth / 1mm,
+       y = 4.2mm / 1mm,
+       z = 11mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = Y, angle = 12deg, global = true)
+  |> translate(
+       x = 8.8mm,
+       y = 3.2mm,
+       z = -11.2mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 80, metalness = 0)
+leftNosePad = clone(unitCylinder)
+  |> scale(
+       x = nosePadContactWidth / 1mm,
+       y = nosePadProjection / 1mm,
+       z = nosePadHeight / 1mm,
+       global = true,
+     )
+  |> rotate(axis = Y, angle = 13deg, global = true)
+  |> translate(
+       x = -nosePadCenterX,
+       y = 5.8mm,
+       z = nosePadCenterZ,
+       global = true,
+     )
+  |> appearance(
+       color = translucentSmoke,
+       roughness = 40,
+       metalness = 0,
+       opacity = 62,
+     )
+rightNosePad = clone(unitCylinder)
+  |> scale(
+       x = nosePadContactWidth / 1mm,
+       y = nosePadProjection / 1mm,
+       z = nosePadHeight / 1mm,
+       global = true,
+     )
+  |> rotate(axis = Y, angle = -13deg, global = true)
+  |> translate(
+       x = nosePadCenterX,
+       y = 5.8mm,
+       z = nosePadCenterZ,
+       global = true,
+     )
+  |> appearance(
+       color = translucentSmoke,
+       roughness = 40,
+       metalness = 0,
+       opacity = 62,
+     )
+
+leftHingeLug = clone(unitBox)
+  |> scale(
+       x = hingeBlockWidth / 1mm,
+       y = hingeBlockDepth / 1mm,
+       z = hingeBlockHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = -hingeCenterX,
+       y = 1mm,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(color = printableBlack, roughness = 76, metalness = 0)
+rightHingeLug = clone(leftHingeLug)
+  |> translate(x = 2 * hingeCenterX, global = true)
+
+leftLensPlaceholder = clone(unitBox)
+  |> scale(
+       x = lensWidth / 1mm,
+       y = 1.2mm / 1mm,
+       z = lensHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftLensX,
+       y = 0.2mm,
+       z = 0mm,
+       global = true,
+     )
+  |> appearance(
+       color = lensTint,
+       roughness = 12,
+       metalness = 0,
+       opacity = 34,
+     )
+rightLensPlaceholder = clone(leftLensPlaceholder)
+  |> translate(x = 2 * lensCenterX, global = true)
+
+cameraPodRaw = clone(unitBox)
+  |> scale(
+       x = cameraPodWidth / 1mm,
+       y = 8mm / 1mm,
+       z = cameraPodHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraCenterX,
+       y = -1.5mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+  |> appearance(color = printableBlack, roughness = 74, metalness = 0)
+cameraPodHole = clone(unitCylinder)
+  |> scale(
+       x = (cameraLensOpeningDiameter + 1mm) / 1mm,
+       y = (cameraLensOpeningDiameter + 1mm) / 1mm,
+       z = 12mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = cameraCenterX,
+       y = -2mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+cameraPod = subtract([cameraPodRaw], tools = [cameraPodHole])
+
+cameraBezelOuter = clone(unitCylinder)
+  |> scale(
+       x = cameraBezelDiameter / 1mm,
+       y = cameraBezelDiameter / 1mm,
+       z = 3mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = cameraCenterX,
+       y = -6mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+  |> appearance(color = graphite, roughness = 58, metalness = 0)
+cameraBezelCut = clone(unitCylinder)
+  |> scale(
+       x = cameraLensOpeningDiameter / 1mm,
+       y = cameraLensOpeningDiameter / 1mm,
+       z = 5mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = cameraCenterX,
+       y = -6mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+cameraBezel = subtract([cameraBezelOuter], tools = [cameraBezelCut])
+cameraGlass = clone(unitCylinder)
+  |> scale(
+       x = 5mm / 1mm,
+       y = 5mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> rotate(axis = X, angle = 90deg, global = true)
+  |> translate(
+       x = cameraCenterX,
+       y = -7.8mm,
+       z = cameraCenterZ,
+       global = true,
+     )
+  |> appearance(
+       color = "#0a0f14",
+       roughness = 12,
+       metalness = 0,
+       opacity = 78,
+     )
+
+cameraCablePort = clone(unitBox)
+  |> scale(
+       x = 19mm / 1mm,
+       y = 2mm / 1mm,
+       z = 2.4mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = cameraCenterX + 8mm,
+       y = 1.8mm,
+       z = cameraCenterZ - 8mm,
+       global = true,
+     )
+  |> appearance(color = matteBlack, roughness = 82, metalness = 0)
+ledWindow = clone(unitBox)
+  |> scale(
+       x = ledWindowWidth / 1mm,
+       y = 1.3mm / 1mm,
+       z = ledWindowHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 45mm,
+       y = -3.7mm,
+       z = -18mm,
+       global = true,
+     )
+  |> appearance(
+       color = ledGreen,
+       roughness = 20,
+       metalness = 0,
+       opacity = 66,
+     )
+ledDiffuserChannel = clone(unitBox)
+  |> scale(
+       x = 9mm / 1mm,
+       y = 2.6mm / 1mm,
+       z = 4mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 45mm,
+       y = -1.2mm,
+       z = -18mm,
+       global = true,
+     )
+  |> appearance(
+       color = translucentSmoke,
+       roughness = 22,
+       metalness = 0,
+       opacity = 32,
+     )
+
+frontFramePrintedBodies = flatten([
+  leftTopRim,
+  leftBottomRim,
+  leftOuterRim,
+  leftInnerRimUpper,
+  leftInnerNasalReturn,
+  rightTopRim,
+  rightBottomRim,
+  rightOuterRim,
+  rightInnerRimUpper,
+  rightInnerNasalReturn,
+  leftLowerCorner,
+  rightLowerCorner,
+  leftUpperCorner,
+  rightUpperCorner,
+  bridgeTop,
+  bridgeCenterCrownWeb,
+  bridgeUpperArch,
+  leftNosePadStem,
+  rightNosePadStem,
+  leftNosePad,
+  rightNosePad,
+  leftHingeLug,
+  rightHingeLug,
+  cameraPod,
+  cameraBezel,
+  cameraCablePort
+])
+frontFrameBodies = flatten([
+  frontFramePrintedBodies,
+  leftLensPlaceholder,
+  rightLensPlaceholder,
+  cameraGlass,
+  ledWindow,
+  ledDiffuserChannel
+])
+
+export frontFramePrintedExport = frontFramePrintedBodies
+export frontFrameExport = frontFrameBodies

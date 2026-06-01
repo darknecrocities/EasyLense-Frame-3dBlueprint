@@ -1,0 +1,213 @@
+// M2 cover fastener callouts
+// Visual M2 screw, counterbore, clearance, and heat-set insert markers for covers.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0, experimentalFeatures = allow)
+
+import * from "parameters.kcl"
+import unitBoxExport as unitBox from "unit_box.kcl"
+import unitCylinderExport as unitCylinder from "unit_cylinder.kcl"
+
+rightTempleX = hingeCenterX + 7mm
+leftTempleX = -hingeCenterX - 7mm
+rightPostX = espClearWidth / 2 - 4mm
+rightPostY = espClearLength / 2 - 5mm
+leftPostX = batteryClearWidth / 2 - 3.5mm
+leftPostY = batteryClearLength / 2 - 5mm
+rightMarkerZ = espClearHeight / 2 + coverThickness + 2mm
+leftMarkerZ = batteryClearHeight / 2 + coverThickness + 2mm
+rightHoleY1 = templeAssemblyCenterY + espCenterY - rightPostY
+rightHoleY2 = templeAssemblyCenterY + espCenterY + rightPostY
+leftHoleY1 = templeAssemblyCenterY + batteryCenterY - leftPostY
+leftHoleY2 = templeAssemblyCenterY + batteryCenterY + leftPostY
+
+rightCoverHoleMarker1 = clone(unitCylinder)
+  |> scale(
+       x = 7mm / 1mm,
+       y = 7mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = rightTempleX - rightPostX,
+       y = rightHoleY1,
+       z = rightMarkerZ,
+       global = true,
+     )
+  |> appearance(
+       color = blueprintBlue,
+       roughness = 36,
+       metalness = 0,
+       opacity = 58,
+     )
+rightCoverHoleMarker2 = clone(rightCoverHoleMarker1)
+  |> translate(x = 2 * rightPostX, global = true)
+rightCoverHoleMarker3 = clone(rightCoverHoleMarker1)
+  |> translate(y = 2 * rightPostY, global = true)
+rightCoverHoleMarker4 = clone(rightCoverHoleMarker2)
+  |> translate(y = 2 * rightPostY, global = true)
+
+leftCoverHoleMarker1 = clone(unitCylinder)
+  |> scale(
+       x = 7mm / 1mm,
+       y = 7mm / 1mm,
+       z = 0.8mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = leftTempleX - leftPostX,
+       y = leftHoleY1,
+       z = leftMarkerZ,
+       global = true,
+     )
+  |> appearance(
+       color = blueprintBlue,
+       roughness = 36,
+       metalness = 0,
+       opacity = 58,
+     )
+leftCoverHoleMarker2 = clone(leftCoverHoleMarker1)
+  |> translate(x = 2 * leftPostX, global = true)
+leftCoverHoleMarker3 = clone(leftCoverHoleMarker1)
+  |> translate(y = 2 * leftPostY, global = true)
+leftCoverHoleMarker4 = clone(leftCoverHoleMarker2)
+  |> translate(y = 2 * leftPostY, global = true)
+
+rightLeader = clone(unitBox)
+  |> scale(
+       x = 72mm / 1mm,
+       y = 0.9mm / 1mm,
+       z = 0.9mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 137mm,
+       y = rightHoleY2,
+       z = rightMarkerZ + 2.5mm,
+       global = true,
+     )
+  |> appearance(color = blueprintBlue, roughness = 40, metalness = 0)
+leftLeader = clone(rightLeader)
+  |> translate(
+       x = -274mm,
+       y = leftHoleY2 - rightHoleY2,
+       z = leftMarkerZ - rightMarkerZ,
+       global = true,
+     )
+
+m2ScrewGaugeShaft = clone(unitCylinder)
+  |> scale(
+       x = m2ScrewDiameter / 1mm,
+       y = m2ScrewDiameter / 1mm,
+       z = m2CoverScrewLength / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 180mm,
+       y = rightHoleY2,
+       z = 21mm,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 30, metalness = 85)
+m2ScrewGaugeHead = clone(unitCylinder)
+  |> scale(
+       x = m2ScrewHeadDiameter / 1mm,
+       y = m2ScrewHeadDiameter / 1mm,
+       z = m2ScrewHeadHeight / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 180mm,
+       y = rightHoleY2,
+       z = 26.6mm,
+       global = true,
+     )
+  |> appearance(color = hardwareSteel, roughness = 30, metalness = 85)
+m2InsertGauge = clone(unitCylinder)
+  |> scale(
+       x = m2HeatSetInsertOuterDiameter / 1mm,
+       y = m2HeatSetInsertOuterDiameter / 1mm,
+       z = m2HeatSetInsertLength / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 190mm,
+       y = rightHoleY2,
+       z = 23mm,
+       global = true,
+     )
+  |> appearance(color = copperGold, roughness = 34, metalness = 60)
+clearanceGauge = clone(unitCylinder)
+  |> scale(
+       x = coverScrewClearanceDiameter / 1mm,
+       y = coverScrewClearanceDiameter / 1mm,
+       z = 2.4mm / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 202mm,
+       y = rightHoleY2,
+       z = 23mm,
+       global = true,
+     )
+  |> appearance(
+       color = clearanceCyan,
+       roughness = 25,
+       metalness = 0,
+       opacity = 52,
+     )
+insertHoleGauge = clone(unitCylinder)
+  |> scale(
+       x = m2HeatSetInsertHoleDiameter / 1mm,
+       y = m2HeatSetInsertHoleDiameter / 1mm,
+       z = m2HeatSetInsertLength / 1mm,
+       global = true,
+     )
+  |> translate(
+       x = 214mm,
+       y = rightHoleY2,
+       z = 23mm,
+       global = true,
+     )
+  |> appearance(
+       color = copperGold,
+       roughness = 34,
+       metalness = 60,
+       opacity = 52,
+     )
+
+leftM2ScrewGaugeShaft = clone(m2ScrewGaugeShaft)
+  |> translate(x = -360mm, y = leftHoleY2 - rightHoleY2, global = true)
+leftM2ScrewGaugeHead = clone(m2ScrewGaugeHead)
+  |> translate(x = -360mm, y = leftHoleY2 - rightHoleY2, global = true)
+leftM2InsertGauge = clone(m2InsertGauge)
+  |> translate(x = -380mm, y = leftHoleY2 - rightHoleY2, global = true)
+leftClearanceGauge = clone(clearanceGauge)
+  |> translate(x = -404mm, y = leftHoleY2 - rightHoleY2, global = true)
+leftInsertHoleGauge = clone(insertHoleGauge)
+  |> translate(x = -428mm, y = leftHoleY2 - rightHoleY2, global = true)
+
+fastenerCallouts = flatten([
+  rightCoverHoleMarker1,
+  rightCoverHoleMarker2,
+  rightCoverHoleMarker3,
+  rightCoverHoleMarker4,
+  leftCoverHoleMarker1,
+  leftCoverHoleMarker2,
+  leftCoverHoleMarker3,
+  leftCoverHoleMarker4,
+  rightLeader,
+  leftLeader,
+  m2ScrewGaugeShaft,
+  m2ScrewGaugeHead,
+  m2InsertGauge,
+  clearanceGauge,
+  insertHoleGauge,
+  leftM2ScrewGaugeShaft,
+  leftM2ScrewGaugeHead,
+  leftM2InsertGauge,
+  leftClearanceGauge,
+  leftInsertHoleGauge
+])
+
+export fastenerCalloutsExport = fastenerCallouts
+
+fastenerCallouts
